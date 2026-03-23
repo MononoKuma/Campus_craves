@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../src/helpers/functions.php';
-require_once __DIR__ . '/../../src/controllers/SellerController.php';
+require_once __DIR__ . '/../src/helpers/functions.php';
+require_once __DIR__ . '/../src/controllers/SellerController.php';
 
 // Strict seller check
 if (!isSeller()) {
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id']) && isset(
 $orders = $sellerController->getFilteredSellerOrders($sellerId, $search, $status, $date_from, $date_to, $amount_min, $amount_max);
 ?>
 
-<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
 
 <div class="admin-container">
     <div class="admin-header-flex modern-panel">
@@ -482,4 +482,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>

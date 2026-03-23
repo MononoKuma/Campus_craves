@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../src/helpers/functions.php';
-require_once __DIR__ . '/../../src/controllers/SellerController.php';
+require_once __DIR__ . '/../src/helpers/functions.php';
+require_once __DIR__ . '/../src/controllers/SellerController.php';
 
 // Strict seller check
 if (!isSeller()) {
@@ -14,7 +14,7 @@ $storeStatus = $sellerController->getStoreStatus($sellerId);
 $profile = $sellerController->getSellerProfile($sellerId);
 ?>
 
-<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
 
 <main class="seller-dashboard-main">
     <div class="seller-dashboard-container">
@@ -735,4 +735,4 @@ $profile = $sellerController->getSellerProfile($sellerId);
 }
 </style>
 
-<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>

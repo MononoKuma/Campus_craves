@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../../src/helpers/functions.php';
-require_once __DIR__ . '/../../../src/controllers/AdminController.php';
+require_once __DIR__ . '/../../src/helpers/functions.php';
+require_once __DIR__ . '/../../src/controllers/AdminController.php';
 
 if (!isAdmin()) {
     header('Location: /login.php');
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<?php require_once __DIR__ . '/../../../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
 <div class="admin-container">
     <div class="admin-header brass-panel">
         <h1 class="gears-title">✏️ Edit User</h1>
@@ -89,4 +89,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </div>
-<?php require_once __DIR__ . '/../../../src/views/partials/footer.php'; ?> 
+<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?> 
