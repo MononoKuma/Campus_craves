@@ -1,6 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/SellerController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/atomic_upload.php';
 
 // Strict seller check
 if (!isSeller()) {
@@ -31,28 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Stock quantity cannot be negative.';
     }
 
-    // Handle image upload
+    // Handle image upload atomically
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (in_array($_FILES['image']['type'], $allowedTypes)) {
-            $uploadDir = '/images/products/';
-            $fileName = uniqid() . '_' . basename($_FILES['image']['name']);
-            // Use absolute path for the container filesystem
-            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . $uploadDir . $fileName;
-            
-            // Ensure the directory exists
-            $targetDir = $_SERVER['DOCUMENT_ROOT'] . '/images/products/';
-            if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0755, true);
-            }
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                $data['image_path'] = $fileName; // Store only filename, not full path
-            } else {
-                $errors[] = 'Failed to upload image. Error: ' . $_FILES['image']['error'];
-            }
+        $atomicUpload = new AtomicUpload();
+        $uploadResult = $atomicUpload->uploadImage($_FILES['image']);
+        
+        if ($uploadResult['success']) {
+            // Store temp info for atomic processing
+            $data['temp_image_path'] = $uploadResult['temp_path'];
+            $data['image_filename'] = $uploadResult['filename'];
         } else {
-            $errors[] = 'Invalid image type. Only JPEG, PNG, and GIF are allowed.';
+            $errors[] = 'Failed to upload image: ' . $uploadResult['error'];
         }
     }
 

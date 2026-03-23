@@ -3,17 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/SellerController.php';
 
 // Determine correct image path for each product
-function getProductImageUrl($imagePath) {
-    if (!$imagePath) {
-        return '/images/products/default.jpg';
-    }
-    // If path already contains 'products/', just prepend '/images/'
-    if (strpos($imagePath, 'products/') === 0) {
-        return '/images/' . $imagePath;
-    }
-    // Otherwise, assume it's just a filename
-    return '/images/products/' . $imagePath;
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/image_helper.php';
 
 // Strict seller check
 if (!isSeller()) {

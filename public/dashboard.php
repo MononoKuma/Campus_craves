@@ -4,6 +4,7 @@ require_once __DIR__ . '/src/controllers/ProductController.php';
 require_once __DIR__ . '/src/controllers/CartController.php';
 require_once __DIR__ . '/src/helpers/review_helpers.php';
 require_once __DIR__ . '/src/models/Users.php';
+require_once __DIR__ . '/src/helpers/image_helper.php';
 
 // Redirect if not logged in
 if (!isLoggedIn()) {
@@ -157,7 +158,7 @@ function getProductImageUrl($imagePath) {
                             <line x1="12" y1="22.08" x2="12" y2="12"/>
                         </svg>
                     </div>
-                    <h2 class="card-title">Featured Materials</h2>
+                    <h2 class="card-title">Featured Products</h2>
                     <div class="card-actions">
                         <a href="/products.php" class="view-all-link">View All</a>
                     </div>
@@ -217,7 +218,7 @@ function getProductImageUrl($imagePath) {
                                     <line x1="9" y1="15" x2="15" y2="15"/>
                                 </svg>
                             </div>
-                            <h3>Browse All Materials</h3>
+                            <h3>Browse All Products</h3>
                             <p>Explore our full catalog</p>
                         </a>
                         

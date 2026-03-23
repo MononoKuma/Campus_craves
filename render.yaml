@@ -1,0 +1,31 @@
+services:
+  # Web Service
+  - type: web
+    name: capus-craves
+    env: docker
+    dockerfilePath: ./render.Dockerfile
+    plan: free
+    disk:
+      name: images
+      mountPath: /var/www/html/images
+      sizeGB: 1
+    envVars:
+      - key: DB_HOST
+        value: dpg-d70njbsr85hc73dju6eg-a
+      - key: DB_PORT
+        value: 5432
+      - key: DB_NAME
+        value: capus_craves
+      - key: DB_USER
+        value: capus_user
+      - key: DB_PASSWORD
+        value: dASi13lwEJsxMFqCmjlYB0UuH2wbeaZz
+      - key: DB_TYPE
+        value: pgsql
+    
+  # Database Service  
+  - type: postgres
+    name: capus-craves-db
+    database: capus_craves
+    user: capus_user
+    plan: free

@@ -83,15 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cartItems = $cartController->getCart();
 }
 
-function getProductImageUrl($imagePath) {
-    if (!$imagePath) {
-        return '/images/products/default.jpg';
-    }
-    if (strpos($imagePath, 'products/') === 0) {
-        return '/images/' . $imagePath;
-    }
-    return '/images/products/' . $imagePath;
-}
+require_once __DIR__ . '/src/helpers/image_helper.php';
+
 ?>
 
 <?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
