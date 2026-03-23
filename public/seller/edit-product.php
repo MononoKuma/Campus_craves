@@ -151,15 +151,23 @@ if (!empty($product['allergens'])) {
             <label>Allergens (for filtering)</label>
             <div class="checkbox-group">
                 <?php 
-                $allergenOptions = ['milk', 'eggs', 'fish', 'shellfish', 'tree nuts', 'peanuts', 'wheat', 'soy', 'sesame'];
+                $allergenOptions = [
+                    'nuts' => 'Nuts',
+                    'dairy' => 'Dairy',
+                    'gluten' => 'Gluten',
+                    'eggs' => 'Eggs',
+                    'soy' => 'Soy',
+                    'shellfish' => 'Shellfish',
+                    'sesame' => 'Sesame'
+                ];
                 $selectedAllergens = $_POST['allergens'] ?? $existingAllergens;
                 ?>
-                <?php foreach ($allergenOptions as $allergen): ?>
+                <?php foreach ($allergenOptions as $value => $label): ?>
                     <label class="checkbox-label">
-                        <input type="checkbox" name="allergens[]" value="<?= htmlspecialchars(ucwords($allergen)) ?>"
-                               <?= in_array(ucwords($allergen), $selectedAllergens) ? 'checked' : '' ?>>
+                        <input type="checkbox" name="allergens[]" value="<?= htmlspecialchars($value) ?>"
+                               <?= in_array($value, $selectedAllergens) ? 'checked' : '' ?>>
                         <span class="checkmark"></span>
-                        <?= htmlspecialchars(ucwords($allergen)) ?>
+                        <?= htmlspecialchars($label) ?>
                     </label>
                 <?php endforeach; ?>
             </div>

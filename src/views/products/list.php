@@ -202,12 +202,7 @@ function imageExists($url) {
                                     'eggs' => 'Eggs',
                                     'soy' => 'Soy',
                                     'shellfish' => 'Shellfish',
-                                    'sesame' => 'Sesame',
-                                    'fish' => 'Fish',
-                                    'peanuts' => 'Peanuts',
-                                    'wheat' => 'Wheat',
-                                    'tree nuts' => 'Tree Nuts',
-                                    'milk' => 'Milk'
+                                    'sesame' => 'Sesame'
                                 ];
                                 ?>
                                 <?php foreach ($allergenOptions as $value => $label): ?>

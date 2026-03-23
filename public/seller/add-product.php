@@ -209,17 +209,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     <div class="allergens-grid">
                         <?php 
-                        $allergenOptions = ['milk', 'eggs', 'fish', 'shellfish', 'tree nuts', 'peanuts', 'wheat', 'soy', 'sesame'];
+                        $allergenOptions = [
+                            'nuts' => 'Nuts',
+                            'dairy' => 'Dairy',
+                            'gluten' => 'Gluten',
+                            'eggs' => 'Eggs',
+                            'soy' => 'Soy',
+                            'shellfish' => 'Shellfish',
+                            'sesame' => 'Sesame'
+                        ];
                         $selectedAllergens = $_POST['allergens'] ?? [];
                         ?>
-                        <?php foreach ($allergenOptions as $allergen): ?>
+                        <?php foreach ($allergenOptions as $value => $label): ?>
                             <label class="allergen-card">
-                                <input type="checkbox" name="allergens[]" value="<?= htmlspecialchars(ucwords($allergen)) ?>"
+                                <input type="checkbox" name="allergens[]" value="<?= htmlspecialchars($value) ?>"
                                        class="allergen-input"
-                                       <?= in_array(ucwords($allergen), $selectedAllergens) ? 'checked' : '' ?>>
+                                       <?= in_array($value, $selectedAllergens) ? 'checked' : '' ?>>
                                 <div class="allergen-content">
-                                    <div class="allergen-icon"><?= getAllergenIcon($allergen) ?></div>
-                                    <span class="allergen-name"><?= htmlspecialchars(ucwords($allergen)) ?></span>
+                                    <div class="allergen-icon"><?= getAllergenIcon($value) ?></div>
+                                    <span class="allergen-name"><?= htmlspecialchars($label) ?></span>
                                 </div>
                             </label>
                         <?php endforeach; ?>
@@ -305,14 +313,12 @@ uploadArea.addEventListener('click', () => {
 <?php
 function getAllergenIcon($allergen) {
     $icons = [
-        'milk' => '🥛',
+        'nuts' => '🥜',
+        'dairy' => '🥛',
+        'gluten' => '🌾',
         'eggs' => '🥚',
-        'fish' => '🐟',
-        'shellfish' => '🦐',
-        'tree nuts' => '🌰',
-        'peanuts' => '🥜',
-        'wheat' => '🌾',
         'soy' => '🫘',
+        'shellfish' => '🦐',
         'sesame' => '🫘'
     ];
     return $icons[$allergen] ?? '⚠️';
