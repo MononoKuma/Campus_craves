@@ -207,7 +207,7 @@ class ComplaintController {
     public function getUserOrders($userId) {
         $stmt = $this->db->prepare("
             SELECT o.*, 
-                   GROUP_CONCAT(p.name SEPARATOR ', ') as product_names
+                   STRING_AGG(p.name, ', ') as product_names
             FROM orders o
             LEFT JOIN order_items oi ON o.id = oi.order_id
             LEFT JOIN products p ON oi.product_id = p.id

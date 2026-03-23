@@ -72,7 +72,7 @@ if (isset($_GET['detail']) && is_numeric($_GET['detail'])) {
 }
 ?>
 
-<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
 
 <div class="admin-container">
     <div class="admin-header">
@@ -783,4 +783,4 @@ document.addEventListener('keydown', function(event) {
 });
 </script>
 
-<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/footer.php'; ?>

@@ -117,7 +117,6 @@ function getProductImageUrl($imagePath) {
         <div class="dashboard-header">
             <div class="welcome-section">
                 <h1 class="dashboard-title">Welcome Back, <?= htmlspecialchars($_SESSION['username'] ?? 'Engineer') ?></h1>
-                <p class="dashboard-subtitle">Here's what's happening with your construction projects today</p>
             </div>
             <div class="header-actions">
                 <!-- Shopping Cart Icon with Counter -->

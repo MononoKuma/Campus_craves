@@ -26,7 +26,7 @@ $statusFilter = $_GET['status'] ?? null;
 $orders = $adminController->getAllOrders($statusFilter);
 ?>
 
-<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
 
 <div class="admin-container">
     <div class="admin-header brass-panel">
@@ -234,7 +234,7 @@ document.getElementById('receipt-modal').addEventListener('click', function(e) {
 });
 </script>
 
-<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/footer.php'; ?>
 
 <style>
 .status-badge {

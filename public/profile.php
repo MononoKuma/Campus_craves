@@ -262,10 +262,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                 <?php if ($verificationStatus['became_seller_at']): ?>
                                     <p class="verified-date">Seller since <?php echo date('F j, Y', strtotime($verificationStatus['became_seller_at'])); ?></p>
                                 <?php endif; ?>
-                                <a href="seller-dashboard.php" class="modern-button primary full-width">Go to Seller Dashboard</a>
+                                <a href="/seller/dashboard.php" class="modern-button primary full-width">Go to Seller Dashboard</a>
                             </div>
                         <?php elseif ($verificationStatus['seller_application_status'] === null): ?>
-                            <p class="card-description">Become a seller and share your steampunk products with our community.</p>
+                            <p class="card-description">Become a seller and share your tasty products with our community.</p>
                             
                             <?php if ($verificationStatus['student_verification_status'] !== 'verified'): ?>
                                 <div class="verification-requirement">
