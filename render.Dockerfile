@@ -22,16 +22,24 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set up Apache
 RUN a2enmod rewrite
+COPY docker/php/apache.conf /etc/apache2/sites-available/000-default.conf
+RUN a2dissite 000-default.conf && a2ensite 000-default.conf \
+    && a2enmod headers \
+    && sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
 # Set working directory
 WORKDIR /var/www/html
 
 # Copy application files
-COPY . /var/www/html/
+COPY public/ /var/www/html/
+COPY src/ /var/www/html/src/
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+    && chmod -R 755 /var/www/html \
+    && chmod -R 644 /var/www/html/*.php \
+    && chmod -R 644 /var/www/html/src/**/*.php \
+    && find /var/www/html -type d -exec chmod 755 {} \;
 
 # Expose port
 EXPOSE 80
