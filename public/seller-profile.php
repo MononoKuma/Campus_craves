@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/ProductController.php';
-require_once __DIR__ . '/../src/models/Users.php';
+require_once __DIR__ . '/src/helpers/functions.php';
+require_once __DIR__ . '/src/controllers/ProductController.php';
+require_once __DIR__ . '/src/models/Users.php';
 
 // Redirect if not logged in
 if (!isLoggedIn()) {
@@ -36,7 +36,7 @@ function getProductImageUrl($imagePath) {
 }
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <div class="brass-panel">
     <div class="seller-profile">
@@ -113,4 +113,4 @@ function getProductImageUrl($imagePath) {
     </div>
 </div>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>

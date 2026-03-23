@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/ReviewController.php';
-require_once __DIR__ . '/../src/controllers/ProductController.php';
-require_once __DIR__ . '/../src/helpers/review_helpers.php';
+require_once __DIR__ . '/src/helpers/functions.php';
+require_once __DIR__ . '/src/controllers/ReviewController.php';
+require_once __DIR__ . '/src/controllers/ProductController.php';
+require_once __DIR__ . '/src/helpers/review_helpers.php';
 
 // Get product ID from URL parameter
 $productId = $_GET['product_id'] ?? null;
@@ -39,7 +39,7 @@ if (isLoggedIn()) {
 }
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <div class="modern-panel">
     <div class="page-header">
@@ -351,4 +351,4 @@ function getProductImageUrl(imagePath) {
 }
 </script>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>

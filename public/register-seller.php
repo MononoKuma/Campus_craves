@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/AuthController.php';
+require_once __DIR__ . '/src/helpers/functions.php';
+require_once __DIR__ . '/src/controllers/AuthController.php';
 
 $authController = new AuthController();
 $errors = [];
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <div class="brass-panel register-seller">
     <h1 class="gears-title">⚙️ Become a Seller</h1>
@@ -121,4 +121,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </div>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>

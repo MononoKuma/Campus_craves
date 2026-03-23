@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/AuthController.php';
+require_once __DIR__ . '/src/helpers/functions.php';
+require_once __DIR__ . '/src/controllers/AuthController.php';
 
 $auth = new AuthController();
 $token = $_GET['token'] ?? '';
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <div class="brass-panel password-reset-container">
     <?php if ($success): ?>
@@ -61,4 +61,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 </div>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>

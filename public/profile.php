@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once __DIR__ . '/../src/config/database.php';
-require_once __DIR__ . '/../src/controllers/AuthController.php';
-require_once __DIR__ . '/../src/controllers/VerificationController.php';
-require_once __DIR__ . '/../src/models/Users.php';
+require_once __DIR__ . '/src/config/database.php';
+require_once __DIR__ . '/src/controllers/AuthController.php';
+require_once __DIR__ . '/src/controllers/VerificationController.php';
+require_once __DIR__ . '/src/models/Users.php';
 
 // Check if user is logged in
 $authController = new AuthController();
