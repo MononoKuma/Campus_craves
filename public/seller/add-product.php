@@ -122,11 +122,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
                         <div class="form-group">
                             <label for="price" class="form-label">
-                                Price ($) *
+                                Price (₱) *
                                 <span class="required-hint">Required</span>
                             </label>
                             <div class="input-wrapper">
-                                <span class="input-prefix">$</span>
+                                <span class="input-prefix">₱</span>
                                 <input type="number" id="price" name="price" step="0.01" min="0.01" required 
                                        class="form-input"
                                        placeholder="0.00"
