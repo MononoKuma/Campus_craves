@@ -1,4 +1,30 @@
 <?php
+// Load environment variables from .env file
+function loadEnv($file) {
+    if (!file_exists($file)) {
+        return false;
+    }
+    
+    $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos($line, '#') === 0) {
+            continue;
+        }
+        
+        if (strpos($line, '=') !== false) {
+            list($key, $value) = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value);
+            putenv("$key=$value");
+            $_ENV[$key] = $value;
+        }
+    }
+    return true;
+}
+
+// Load environment variables
+loadEnv(__DIR__ . '/../../.env');
+
 class Database {
     private $host;
     private $port;
@@ -31,9 +57,22 @@ class Database {
     public function connect() {
         if ($this->conn === null) {
             try {
-                $dsn = $this->db_type === 'mysql' 
-                    ? "mysql:host={$this->host};port={$this->port};dbname={$this->db_name};charset=utf8mb4"
-                    : "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name}";
+                // Check if DATABASE_URL is available (Render format)
+                $databaseUrl = getenv('DATABASE_URL');
+                if ($databaseUrl) {
+                    // Parse DATABASE_URL to create DSN
+                    $parsed = parse_url($databaseUrl);
+                    $dbname = ltrim($parsed['path'], '/');
+                    $dsn = "pgsql:host={$parsed['host']};port={$parsed['port']};dbname={$dbname};sslmode=require";
+                    $username = $parsed['user'];
+                    $password = $parsed['pass'];
+                } else {
+                    $dsn = $this->db_type === 'mysql' 
+                        ? "mysql:host={$this->host};port={$this->port};dbname={$this->db_name};charset=utf8mb4"
+                        : "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name};sslmode=prefer";
+                    $username = $this->username;
+                    $password = $this->password;
+                }
                 
                 $options = [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -46,7 +85,7 @@ class Database {
                     $options[constant('PDO::MYSQL_ATTR_RECONNECT')] = true;
                 }
                 
-                $this->conn = new PDO($dsn, $this->username, $this->password, $options);
+                $this->conn = new PDO($dsn, $username, $password, $options);
                 
             } catch(PDOException $e) {
                 error_log("Database connection failed: " . $e->getMessage());
