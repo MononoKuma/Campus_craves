@@ -53,7 +53,7 @@ class AdminController {
         // Get recent orders with seller information
         $recentOrdersStmt = $this->db->query("
             SELECT o.*, u.username, 
-                   GROUP_CONCAT(DISTINCT s.username SEPARATOR ', ') as seller_names
+                   STRING_AGG(DISTINCT s.username, ', ') as seller_names
             FROM orders o
             JOIN users u ON o.user_id = u.id
             LEFT JOIN order_items oi ON o.id = oi.order_id
