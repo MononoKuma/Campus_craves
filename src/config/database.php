@@ -10,7 +10,7 @@ class Database {
 
     public function __construct() {
         $this->host = getenv('DB_HOST') ?: 'db';
-        $this->port = getenv('DB_PORT') ?: '3306';
+        $this->port = getenv('DB_PORT') ?: '5432';
         $this->db_name = getenv('DB_NAME') ?: 'capus_craves';
         $this->username = getenv('DB_USER') ?: 'capus_user';
         $this->password = getenv('DB_PASSWORD') ?: 'your_secure_user_password';
@@ -22,7 +22,7 @@ class Database {
         } elseif (strpos($this->host, 'dpg-') !== false || strpos($this->host, 'postgres') !== false) {
             $this->db_type = 'pgsql'; // Render PostgreSQL
         } else {
-            $this->db_type = 'mysql'; // Default to MySQL
+            $this->db_type = 'pgsql'; // Default to PostgreSQL
         }
         
         $this->conn = null;

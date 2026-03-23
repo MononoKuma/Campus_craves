@@ -20,17 +20,16 @@ services:
     restart: unless-stopped
 
   db:
-    image: mysql:8.0
+    image: postgres:15
     ports:
-      - "127.0.0.1:3306:3306"
+      - "127.0.0.1:5432:5432"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-your_secure_root_password}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-capus_craves}
-      MYSQL_USER: ${MYSQL_USER:-capus_user}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-your_secure_user_password}
+      POSTGRES_DB: ${DB_NAME:-capus_craves}
+      POSTGRES_USER: ${DB_USER:-capus_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-your_secure_user_password}
     volumes:
-      - db_data:/var/lib/mysql
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/postgresql/data
+      - ./postgresql-init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - steampunk_network
     restart: unless-stopped
