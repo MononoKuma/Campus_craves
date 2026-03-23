@@ -9,6 +9,14 @@ try {
     $conn = $db->connect();
     echo "✅ Database connected successfully!\n\n";
     
+    // Show database info for debugging
+    echo "🔍 Database Connection Info:\n";
+    echo "   Host: " . getenv('DB_HOST') . "\n";
+    echo "   Port: " . getenv('DB_PORT') . "\n";
+    echo "   Database: " . getenv('DB_NAME') . "\n";
+    echo "   User: " . getenv('DB_USER') . "\n";
+    echo "   Type: " . (getenv('DB_TYPE') ?: 'auto-detected') . "\n\n";
+    
     // Read the PostgreSQL schema file
     $schemaFile = '../postgresql-init.sql';
     if (!file_exists($schemaFile)) {
@@ -63,6 +71,33 @@ try {
     }
     
 } catch (Exception $e) {
-    echo "❌ Database setup failed: " . $e->getMessage() . "\n";
+    echo "❌ Database setup failed: " . $e->getMessage() . "\n\n";
+    
+    // Show debug info
+    echo "🔍 Debug Information:\n";
+    echo "   Environment Variables:\n";
+    echo "   DB_HOST: " . (getenv('DB_HOST') ?: 'NOT SET') . "\n";
+    echo "   DB_PORT: " . (getenv('DB_PORT') ?: 'NOT SET') . "\n";
+    echo "   DB_NAME: " . (getenv('DB_NAME') ?: 'NOT SET') . "\n";
+    echo "   DB_USER: " . (getenv('DB_USER') ?: 'NOT SET') . "\n";
+    echo "   DB_PASSWORD: " . (getenv('DB_PASSWORD') ? '*** SET ***' : 'NOT SET') . "\n";
+    echo "   DB_TYPE: " . (getenv('DB_TYPE') ?: 'NOT SET') . "\n";
+    
+    // Test basic connection without database
+    echo "\n🧪 Testing basic connection...\n";
+    try {
+        $testHost = getenv('DB_HOST');
+        $testPort = getenv('DB_PORT') ?: '5432';
+        $testUser = getenv('DB_USER');
+        $testPass = getenv('DB_PASSWORD');
+        
+        $testConn = new PDO("pgsql:host=$testHost;port=$testPort;dbname=postgres", $testUser, $testPass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_TIMEOUT => 5,
+        ]);
+        echo "✅ Basic connection works! Issue might be with 'capus_craves' database.\n";
+    } catch (Exception $testE) {
+        echo "❌ Basic connection failed: " . $testE->getMessage() . "\n";
+    }
 }
 ?>
