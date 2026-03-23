@@ -4,7 +4,6 @@ require_once __DIR__ . '/src/controllers/ProductController.php';
 require_once __DIR__ . '/src/controllers/CartController.php';
 require_once __DIR__ . '/src/helpers/review_helpers.php';
 require_once __DIR__ . '/src/models/Users.php';
-require_once __DIR__ . '/src/helpers/image_helper.php';
 
 // Redirect if not logged in
 if (!isLoggedIn()) {

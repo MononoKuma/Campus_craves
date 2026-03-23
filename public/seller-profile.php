@@ -25,7 +25,15 @@ if (!$seller || $seller['role'] !== 'seller') {
 $productController = new ProductController();
 $sellerProducts = $productController->getProductsBySeller($sellerId);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/image_helper.php';
+function getProductImageUrl($imagePath) {
+    if (!$imagePath) {
+        return '/images/products/default.jpg';
+    }
+    if (strpos($imagePath, 'products/') === 0) {
+        return '/images/' . $imagePath;
+    }
+    return '/images/products/' . $imagePath;
+}
 ?>
 
 <?php require_once __DIR__ . '/src/views/partials/header.php'; ?>

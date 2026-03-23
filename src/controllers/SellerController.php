@@ -247,46 +247,8 @@ class SellerController {
             return false;
         }
         
-        // Handle image upload atomically
-        $imageFilename = null;
-        if (isset($data['temp_image_path']) && isset($data['image_filename'])) {
-            require_once __DIR__ . '/../helpers/atomic_upload.php';
-            $atomicUpload = new AtomicUpload();
-            
-            // Commit the image upload
-            if ($atomicUpload->commitUpload($data['image_filename'])) {
-                $imageFilename = $data['image_filename'];
-            } else {
-                // Rollback on failure
-                $atomicUpload->rollbackUpload($data['image_filename']);
-                return false;
-            }
-        } else {
-            $imageFilename = $data['image_path'] ?? null;
-        }
-        
-        // Prepare product data
-        $productData = [
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'price' => $data['price'],
-            'image_path' => $imageFilename,
-            'stock_quantity' => $data['stock_quantity'],
-            'seller_id' => $sellerId,
-            'allergens' => $data['allergens'] ?? []
-        ];
-        
-        // Create product in database
-        $result = $this->productModel->createProduct($productData);
-        
-        // If database insert fails, rollback image
-        if (!$result && $imageFilename) {
-            require_once __DIR__ . '/../helpers/atomic_upload.php';
-            $atomicUpload = new AtomicUpload();
-            $atomicUpload->rollbackUpload($imageFilename);
-        }
-        
-        return $result;
+        $data['seller_id'] = $sellerId;
+        return $this->productModel->createProduct($data);
     }
 
     public function getProductById($productId) {

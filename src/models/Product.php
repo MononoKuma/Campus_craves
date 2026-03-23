@@ -34,43 +34,23 @@ class Product {
     }
 
     public function createProduct($data) {
-        try {
-            // Start transaction
-            $this->db->connect()->beginTransaction();
-            
-            $stmt = $this->db->prepare("
-                INSERT INTO products 
-                (name, description, price, image_path, stock_quantity, seller_id, allergens)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ");
-            
-            $allergensJson = isset($data['allergens']) ? json_encode($data['allergens']) : null;
-            
-            $result = $stmt->execute([
-                $data['name'],
-                $data['description'],
-                $data['price'],
-                $data['image_path'] ?? null,
-                $data['stock_quantity'],
-                $data['seller_id'] ?? null,
-                $allergensJson
-            ]);
-            
-            if ($result) {
-                // Commit transaction
-                $this->db->connect()->commit();
-                return true;
-            } else {
-                // Rollback on failure
-                $this->db->connect()->rollBack();
-                return false;
-            }
-        } catch (Exception $e) {
-            // Rollback on error
-            $this->db->connect()->rollBack();
-            error_log("Product creation failed: " . $e->getMessage());
-            return false;
-        }
+        $stmt = $this->db->prepare("
+            INSERT INTO products 
+            (name, description, price, image_path, stock_quantity, seller_id, allergens)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ");
+        
+        $allergensJson = isset($data['allergens']) ? json_encode($data['allergens']) : null;
+        
+        return $stmt->execute([
+            $data['name'],
+            $data['description'],
+            $data['price'],
+            $data['image_path'] ?? null,
+            $data['stock_quantity'],
+            $data['seller_id'] ?? null,
+            $allergensJson
+        ]);
     }
 
     public function updateProduct($id, $data) {

@@ -3,7 +3,6 @@ require_once __DIR__ . '/../../helpers/functions.php';
 require_once __DIR__ . '/../../controllers/ProductController.php';
 require_once __DIR__ . '/../../controllers/CartController.php';
 require_once __DIR__ . '/../../helpers/review_helpers.php';
-require_once __DIR__ . '/../../helpers/image_helper.php';
 
 $productController = new ProductController();
 $cartController = new CartController();
@@ -86,6 +85,25 @@ foreach ($products as $product) {
 }
 
 $products = $filteredProducts;
+
+// Determine correct image path for each product
+function getProductImageUrl($imagePath) {
+    if (!$imagePath) {
+        return '/images/products/default.jpg';
+    }
+    // If path already contains 'products/', just prepend '/images/'
+    if (strpos($imagePath, 'products/') === 0) {
+        return '/images/' . $imagePath;
+    }
+    // Otherwise, assume it's just a filename
+    return '/images/products/' . $imagePath;
+}
+
+// Check if image file exists (simple check)
+function imageExists($url) {
+    $filePath = __DIR__ . '/../../public' . $url;
+    return file_exists($filePath);
+}
 ?>
 
 <?php require_once __DIR__ . '/../partials/header.php'; ?>

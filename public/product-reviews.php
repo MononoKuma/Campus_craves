@@ -340,7 +340,15 @@ function sortReviews(value) {
     window.location.href = url.toString();
 }
 
-require_once __DIR__ . '/src/helpers/image_helper.php';
+function getProductImageUrl(imagePath) {
+    if (!imagePath) {
+        return '/images/products/default.jpg';
+    }
+    if (imagePath.includes('products/')) {
+        return '/images/' + imagePath;
+    }
+    return '/images/products/' + imagePath;
+}
 </script>
 
 <?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>
