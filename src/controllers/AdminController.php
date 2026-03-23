@@ -59,7 +59,7 @@ class AdminController {
             LEFT JOIN order_items oi ON o.id = oi.order_id
             LEFT JOIN products p ON oi.product_id = p.id
             LEFT JOIN users s ON p.seller_id = s.id
-            GROUP BY o.id
+            GROUP BY o.id, u.username
             ORDER BY o.created_at DESC
             LIMIT 5
         ");

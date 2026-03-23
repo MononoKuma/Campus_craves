@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/AdminController.php';
+require_once __DIR__ . '/../../src/helpers/functions.php';
+require_once __DIR__ . '/../../src/controllers/AdminController.php';
 
 // Strict admin check
 if (!isAdmin()) {
@@ -13,7 +13,7 @@ $adminController = new AdminController();
 $sales = $adminController->getAllOrders('completed');
 
 ?>
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
 
 <div class="admin-container">
     <div class="admin-header brass-panel">
@@ -51,4 +51,4 @@ $sales = $adminController->getAllOrders('completed');
     </div>
 </div>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?> 
+<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?> 

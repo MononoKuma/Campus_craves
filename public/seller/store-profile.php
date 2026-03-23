@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/SellerController.php';
+require_once __DIR__ . '/../../src/helpers/functions.php';
+require_once __DIR__ . '/../../src/controllers/SellerController.php';
 
 // Strict seller check
 if (!isSeller()) {
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
 
 <div class="brass-panel store-profile">
     <h1 class="gears-title">⚙️ My Micro Store</h1>
@@ -162,4 +162,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 </style>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?>

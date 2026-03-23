@@ -97,7 +97,7 @@ function getProductImageUrl($imagePath) {
 <?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <link rel="stylesheet" href="/css/cart.css">
-<script src="/js/cart-page.js" defer></script>
+<script src="/js/cart.js" defer></script>
 
 <main class="cart-main">
     <div class="cart-container">
