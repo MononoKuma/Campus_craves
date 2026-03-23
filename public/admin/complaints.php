@@ -46,22 +46,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Get complaints based on view type
 $viewType = $_GET['view'] ?? 'all';
+
+// Debug: Show what view type we're using
+error_log("Filter view type: $viewType");
+
 switch ($viewType) {
     case 'buyer':
+        error_log("Getting buyer complaints...");
         $complaints = $adminController->getComplaintsByType('buyer');
+        error_log("Buyer complaints count: " . count($complaints));
         break;
     case 'seller':
+        error_log("Getting seller complaints...");
         $complaints = $adminController->getComplaintsByType('seller');
+        error_log("Seller complaints count: " . count($complaints));
         break;
     default:
+        error_log("Getting all complaints...");
         $complaints = $adminController->getAllComplaints();
+        error_log("All complaints count: " . count($complaints));
         break;
 }
-
-// Debug: Show what we got
-error_log("View type: $viewType");
-error_log("Complaints count: " . count($complaints));
-error_log("Complaints data: " . print_r($complaints, true));
 
 // Get specific complaint details if viewing one
 $complaintDetails = null;
@@ -97,16 +102,6 @@ if (isset($_GET['detail']) && is_numeric($_GET['detail'])) {
     <div class="complaints-table-section">
         <h2 class="section-title"><?= ucfirst($viewType) ?> Complaints</h2>
         
-        <!-- Debug Info -->
-        <div style="background: #f0f0f0; padding: 10px; margin-bottom: 20px; border-radius: 4px; font-family: monospace; font-size: 12px;">
-            <strong>Debug Info:</strong><br>
-            View Type: <?= htmlspecialchars($viewType) ?><br>
-            Complaints Count: <?= count($complaints) ?><br>
-            <?php if (empty($complaints)): ?>
-                <span style="color: red;">No complaints found for this filter!</span><br>
-                Try: <a href="/file-complaint.php" target="_blank">File a test complaint</a>
-            <?php endif; ?>
-        </div>
         <table class="complaints-table">
             <thead>
                 <tr>
