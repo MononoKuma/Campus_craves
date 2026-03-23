@@ -45,8 +45,8 @@ class AuthController {
             // Insert user
             $stmt = $this->db->prepare("
                 INSERT INTO users 
-                (first_name, middle_name, last_name, birthday, email, phone, username, password, allergens)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (first_name, middle_name, last_name, birthday, address, email, phone, username, password, allergens)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             
             // Handle allergens array
@@ -57,6 +57,7 @@ class AuthController {
                 $data['middle_name'] ?? null,
                 $data['last_name'],
                 $data['birthday'],
+                'To be updated', // Default address value
                 $data['email'],
                 $data['phone'] ?? null,
                 $data['username'],

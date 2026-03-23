@@ -27,16 +27,6 @@ require_once __DIR__ . '/../src/views/partials/header.php';
         <div class="copper-divider"></div>
     </div>
     
-    <?php if (!empty($errors)): ?>
-        <div class="modern-alert">
-            <ul>
-                <?php foreach ($errors as $error): ?>
-                    <li><?= htmlspecialchars($error) ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    <?php endif; ?>
-    
     <form method="POST" class="modern-form register-form" id="registerForm">
         <div class="form-section">
             <h3 class="section-title">Personal Information</h3>
