@@ -14,7 +14,17 @@ class Database {
         $this->db_name = getenv('DB_NAME') ?: 'capus_craves';
         $this->username = getenv('DB_USER') ?: 'capus_user';
         $this->password = getenv('DB_PASSWORD') ?: 'your_secure_user_password';
-        $this->db_type = getenv('DB_TYPE') ?: 'mysql';
+        
+        // Auto-detect database type based on host or environment variable
+        $db_type = getenv('DB_TYPE');
+        if ($db_type) {
+            $this->db_type = $db_type;
+        } elseif (strpos($this->host, 'dpg-') !== false || strpos($this->host, 'postgres') !== false) {
+            $this->db_type = 'pgsql'; // Render PostgreSQL
+        } else {
+            $this->db_type = 'mysql'; // Default to MySQL
+        }
+        
         $this->conn = null;
     }
 
@@ -32,7 +42,7 @@ class Database {
                     PDO::ATTR_TIMEOUT => 10,
                 ];
                 
-                if ($this->db_type === 'mysql') {
+                if ($this->db_type === 'mysql' && defined('PDO::MYSQL_ATTR_RECONNECT')) {
                     $options[PDO::MYSQL_ATTR_RECONNECT] = true;
                 }
                 
@@ -40,7 +50,12 @@ class Database {
                 
             } catch(PDOException $e) {
                 error_log("Database connection failed: " . $e->getMessage());
-                throw new Exception("Database connection failed. Please check your configuration.");
+                // Show actual error in development, generic in production
+                $error_message = "Database connection failed. Please check your configuration.";
+                if (getenv('ENVIRONMENT') === 'development' || strpos($e->getMessage(), 'connection') !== false) {
+                    $error_message .= " (" . $e->getMessage() . ")";
+                }
+                throw new Exception($error_message);
             }
         }
         return $this->conn;
