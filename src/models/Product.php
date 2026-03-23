@@ -17,6 +17,7 @@ class Product {
             SELECT p.*, u.username as seller_name, COALESCE(p.average_rating, 0) as average_rating, COALESCE(p.review_count, 0) as review_count 
             FROM products p
             LEFT JOIN users u ON p.seller_id = u.id
+            WHERE (u.store_status = 'available' OR u.store_status IS NULL OR u.role != 'seller')
             ORDER BY p.name
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -94,9 +95,11 @@ class Product {
 
     public function searchProducts($query) {
         $stmt = $this->db->prepare("
-            SELECT p.*, COALESCE(p.average_rating, 0) as average_rating, COALESCE(p.review_count, 0) as review_count FROM products 
-            WHERE name LIKE ? OR description LIKE ?
-            ORDER BY name
+            SELECT p.*, u.username as seller_name, COALESCE(p.average_rating, 0) as average_rating, COALESCE(p.review_count, 0) as review_count 
+            FROM products p
+            LEFT JOIN users u ON p.seller_id = u.id
+            WHERE (name LIKE ? OR description LIKE ?) AND (u.store_status = 'available' OR u.store_status IS NULL OR u.role != 'seller')
+            ORDER BY p.name
         ");
         $searchTerm = "%$query%";
         $stmt->execute([$searchTerm, $searchTerm]);
@@ -125,7 +128,7 @@ class Product {
             SELECT p.*, u.username as seller_name, COALESCE(p.average_rating, 0) as average_rating, COALESCE(p.review_count, 0) as review_count 
             FROM products p
             LEFT JOIN users u ON p.seller_id = u.id
-            WHERE JSON_CONTAINS(p.allergens, JSON_ARRAY($placeholders))
+            WHERE JSON_CONTAINS(p.allergens, JSON_ARRAY($placeholders)) AND (u.store_status = 'available' OR u.store_status IS NULL OR u.role != 'seller')
             ORDER BY p.name
         ");
         $stmt->execute($allergens);
@@ -137,7 +140,7 @@ class Product {
             SELECT p.*, u.username as seller_name, COALESCE(p.average_rating, 0) as average_rating, COALESCE(p.review_count, 0) as review_count 
             FROM products p
             LEFT JOIN users u ON p.seller_id = u.id
-            WHERE p.review_count > 0
+            WHERE p.review_count > 0 AND (u.store_status = 'available' OR u.store_status IS NULL OR u.role != 'seller')
             ORDER BY p.average_rating DESC, p.review_count DESC
             LIMIT ?
         ");
