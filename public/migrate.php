@@ -10,7 +10,7 @@
  */
 
 // Load database config
-require_once __DIR__ . '/src/config/database.php';
+require_once __DIR__ . '/src/config/database.php';  // In Render container: /var/www/html/src/config/database.php
 
 // Secret key protection - change this or remove after running
 $secret = isset($_GET['key']) ? $_GET['key'] : '';
