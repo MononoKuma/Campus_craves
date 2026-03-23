@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../src/helpers/functions.php';
-require_once __DIR__ . '/../../src/controllers/SellerController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/SellerController.php';
 
 // Strict seller check
 if (!isSeller()) {
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
 
 <section class="add-product-section">
     <div class="container">
@@ -240,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </section>
 
-<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/footer.php'; ?>
 
 <script>
 // Image upload preview

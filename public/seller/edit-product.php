@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../src/helpers/functions.php';
-require_once __DIR__ . '/../../src/controllers/SellerController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/SellerController.php';
 
 // Determine correct image path for each product
 function getProductImageUrl($imagePath) {
@@ -100,7 +100,7 @@ if (!empty($product['allergens'])) {
 }
 ?>
 
-<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
 
 <div class="brass-panel edit-product">
     <h1 class="gears-title">⚙️ Edit Product</h1>
@@ -175,4 +175,4 @@ if (!empty($product['allergens'])) {
     </form>
 </div>
 
-<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/footer.php'; ?>
