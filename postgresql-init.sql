@@ -143,6 +143,22 @@ CREATE TABLE IF NOT EXISTS review_helpful_votes (
     UNIQUE (review_id, user_id)
 );
 
+-- System settings table
+CREATE TABLE IF NOT EXISTS system_settings (
+    key VARCHAR(100) PRIMARY KEY,
+    value TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert default system settings
+INSERT INTO system_settings (key, value) VALUES 
+    ('store_visibility_mode', 'show_all'),
+    ('maintenance_mode', 'false'),
+    ('allow_registrations', 'true'),
+    ('enable_reviews', 'true')
+ON CONFLICT (key) DO NOTHING;
+
 -- Cart items table
 CREATE TABLE IF NOT EXISTS cart_items (
     id SERIAL PRIMARY KEY,
@@ -150,14 +166,6 @@ CREATE TABLE IF NOT EXISTS cart_items (
     session_id VARCHAR(255) NULL,
     product_id INT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
     quantity INT NOT NULL DEFAULT 1,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- System settings table
-CREATE TABLE IF NOT EXISTS system_settings (
-    key VARCHAR(100) PRIMARY KEY,
-    value TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -176,10 +184,6 @@ CREATE INDEX IF NOT EXISTS idx_users_suspension_ends ON users(suspension_ends);
 CREATE INDEX IF NOT EXISTS idx_cart_user ON cart_items(user_id);
 CREATE INDEX IF NOT EXISTS idx_cart_session ON cart_items(session_id);
 CREATE INDEX IF NOT EXISTS idx_cart_product ON cart_items(product_id);
-
--- Insert default system settings
-INSERT INTO system_settings (key, value) VALUES ('store_visibility_mode', 'show_all')
-ON CONFLICT (key) DO NOTHING;
 
 -- Insert default admin user
 INSERT INTO users (first_name, last_name, birthday, address, email, phone, username, password, role) 
