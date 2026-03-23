@@ -34,6 +34,7 @@ flush();
 // Check if required files exist
 echo "6. File Existence:\n";
 $files = [
+    '/.env',
     '/src/config/database.php',
     '/src/controllers/ComplaintController.php',
     '/src/models/Complaint.php'
@@ -46,8 +47,27 @@ foreach ($files as $file) {
     flush();
 }
 
-// Test environment variables
+// Test environment variables by loading .env directly
 echo "7. Environment Variables:\n";
+$envFile = __DIR__ . '/.env';
+if (file_exists($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos($line, '#') === 0) continue;
+        if (strpos($line, '=') !== false) {
+            list($key, $value) = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value);
+            putenv("$key=$value");
+            $_ENV[$key] = $value;
+        }
+    }
+    echo "   ✓ .env file loaded\n";
+} else {
+    echo "   ✗ .env file not found\n";
+}
+flush();
+
 $envVars = ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_TYPE'];
 foreach ($envVars as $var) {
     echo "   $var: " . (getenv($var) ?: 'NOT SET') . "\n";
