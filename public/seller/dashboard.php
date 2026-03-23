@@ -12,6 +12,18 @@ $sellerId = $_SESSION['user_id'];
 $metrics = $sellerController->getDashboardMetrics($sellerId);
 $storeStatus = $sellerController->getStoreStatus($sellerId);
 $profile = $sellerController->getSellerProfile($sellerId);
+
+// Handle store visibility toggle
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_store_visibility'])) {
+    $newStatus = $storeStatus === 'available' ? 'unavailable' : 'available';
+    if ($sellerController->updateStoreStatus($sellerId, $newStatus)) {
+        $statusText = $newStatus === 'available' ? 'Available' : 'Unavailable';
+        setFlashMessage("Store visibility changed to: $statusText", 'success');
+    } else {
+        setFlashMessage('Failed to update store visibility.', 'error');
+    }
+    redirect('/seller/dashboard.php');
+}
 ?>
 
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
@@ -230,6 +242,44 @@ $profile = $sellerController->getSellerProfile($sellerId);
                     </div>
                 </div>
             </div>
+
+            <!-- Store Visibility Control Card -->
+            <div class="seller-dashboard-card store-visibility-control">
+                <div class="card-header">
+                    <div class="card-icon visibility-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Store Visibility</h2>
+                </div>
+                <div class="card-content">
+                    <form method="POST" class="visibility-form">
+                        <input type="hidden" name="toggle_store_visibility" value="1">
+                        <div class="visibility-status">
+                            <div class="current-mode">
+                                <span class="mode-label">Current Status:</span>
+                                <span class="mode-value <?= $storeStatus === 'available' ? 'mode-available' : 'mode-unavailable' ?>">
+                                    <?= $storeStatus === 'available' ? '🟢 Store Available' : '🔴 Store Unavailable' ?>
+                                </span>
+                            </div>
+                            <p class="mode-description">
+                                <?= $storeStatus === 'available' 
+                                    ? 'Your store is visible to customers and accepting orders.' 
+                                    : 'Your store is hidden from customers and not accepting new orders.' ?>
+                            </p>
+                        </div>
+                        <button type="submit" class="visibility-toggle-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            Toggle Store Visibility
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </main>
@@ -417,7 +467,7 @@ $profile = $sellerController->getSellerProfile($sellerId);
 .seller-dashboard-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto auto;
     gap: 2rem;
     flex: 1;
 }
@@ -434,6 +484,11 @@ $profile = $sellerController->getSellerProfile($sellerId);
 .recent-orders {
     grid-column: 1;
     grid-row: 2;
+}
+
+.store-visibility-control {
+    grid-column: 1 / -1;
+    grid-row: 3;
 }
 
 /* Seller Dashboard Cards */
@@ -732,6 +787,91 @@ $profile = $sellerController->getSellerProfile($sellerId);
     .metrics-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+}
+
+/* Store Visibility Control Styles */
+.visibility-icon {
+    background: linear-gradient(135deg, #8B4513, #CD853F) !important;
+}
+
+.visibility-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.visibility-status {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.current-mode {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border: 1px solid var(--medium-gray);
+    border-radius: 12px;
+}
+
+.mode-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.mode-value {
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.mode-value.mode-available {
+    background: rgba(34, 197, 94, 0.1);
+    color: #166534;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.mode-value.mode-unavailable {
+    background: rgba(239, 68, 68, 0.1);
+    color: #991b1b;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.mode-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0 0.5rem;
+}
+
+.visibility-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    background: linear-gradient(135deg, #8B4513, #CD853F);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.visibility-toggle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+}
+
+.visibility-toggle-btn:active {
+    transform: translateY(0);
 }
 </style>
 

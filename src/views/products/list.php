@@ -308,12 +308,50 @@ function imageExists($url) {
 
     <?php displayFlashMessage(); ?>
 
+    <!-- Allergen Safety Filter Toggle -->
+    <?php if (isLoggedIn()): ?>
+    <div class="allergen-filter-toggle" id="allergen-filter-toggle">
+        <?php if (!empty($userAllergens)): ?>
+            <span class="toggle-label">Filter by safety:</span>
+            <div class="toggle-btn-group">
+                <button type="button" class="toggle-btn active" data-filter="all" id="filter-all-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+                    All
+                </button>
+                <button type="button" class="toggle-btn safe" data-filter="safe" id="filter-safe-btn">
+                    ✅ Safe for Me
+                </button>
+                <button type="button" class="toggle-btn not-safe" data-filter="not-safe" id="filter-notsafe-btn">
+                    ⚠️ Not Safe
+                </button>
+            </div>
+            <span class="toggle-results" id="toggle-results-count"></span>
+        <?php else: ?>
+            <div class="toggle-no-allergens">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                    <path d="M12 8v4"/><path d="M12 16h.01"/>
+                </svg>
+                <span>Set your allergens in <a href="/profile.php">your profile</a> to enable safety filtering</span>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+
     <?php if (empty($products)): ?>
         <div class="steam-alert">No products found.</div>
     <?php else: ?>
         <div class="product-grid">
             <?php foreach ($products as $product): ?>
-                <div class="product-card">
+                <?php
+                // Compute safety for this product
+                $isSafe = true;
+                if (!empty($userAllergens) && isset($product['allergens'])) {
+                    $pAllergens = json_decode($product['allergens'], true) ?: [];
+                    $isSafe = empty(array_intersect($pAllergens, $userAllergens));
+                }
+                ?>
+                <div class="product-card" data-is-safe="<?= $isSafe ? 'true' : 'false' ?>">
                     <?php 
                     $imageUrl = htmlspecialchars(getProductImageUrl($product['image_path'] ?? 'default.jpg'));
                     $fallbackUrl = '/images/products/default.jpg';
@@ -546,6 +584,135 @@ function imageExists($url) {
 </div>
 
 <style>
+/* Allergen Safety Filter Toggle */
+.allergen-filter-toggle {
+    max-width: 1400px;
+    margin: 0 auto 1.5rem auto;
+    padding: 1rem 1.5rem;
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--medium-gray);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.toggle-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.toggle-btn-group {
+    display: flex;
+    gap: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid var(--medium-gray);
+    background: var(--light-gray, #f1f5f9);
+}
+
+.toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    background: transparent;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    position: relative;
+}
+
+.toggle-btn:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background: var(--medium-gray);
+}
+
+.toggle-btn:hover {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--text-primary);
+}
+
+.toggle-btn.active {
+    background: var(--primary-blue);
+    color: white;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.toggle-btn.active::after {
+    display: none;
+}
+
+.toggle-btn.safe.active {
+    background: #16a34a;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+}
+
+.toggle-btn.not-safe.active {
+    background: #dc2626;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.toggle-results {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-left: auto;
+}
+
+.toggle-no-allergens {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    padding: 0.25rem 0;
+}
+
+.toggle-no-allergens a {
+    color: var(--primary-blue);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.toggle-no-allergens a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .allergen-filter-toggle {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+    .toggle-btn-group {
+        width: 100%;
+    }
+    .toggle-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 0.7rem 0.5rem;
+        font-size: 0.8rem;
+    }
+    .toggle-results {
+        margin-left: 0;
+        text-align: center;
+    }
+}
+
 /* Modern Products Page Layout */
 .products-page {
     max-width: 1400px;
@@ -2631,6 +2798,75 @@ function initializeModalFunctionality() {
         });
     });
 }
+</script>
+
+<!-- Allergen Safety Filter Toggle JS -->
+<script>
+(function() {
+    const toggle = document.getElementById('allergen-filter-toggle');
+    if (!toggle) return;
+    const buttons = toggle.querySelectorAll('.toggle-btn[data-filter]');
+    if (!buttons.length) return;
+
+    const productGrid = document.querySelector('.product-grid');
+    if (!productGrid) return;
+
+    const resultsCount = document.getElementById('toggle-results-count');
+    const mainResultsCount = document.querySelector('.results-count');
+
+    function applyFilter(filter) {
+        const cards = productGrid.querySelectorAll('.product-card');
+        let visible = 0;
+
+        cards.forEach(card => {
+            const isSafe = card.getAttribute('data-is-safe');
+            let show = true;
+
+            if (filter === 'safe') {
+                show = isSafe === 'true';
+            } else if (filter === 'not-safe') {
+                show = isSafe === 'false';
+            }
+
+            card.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+
+        // Update counts
+        if (resultsCount) {
+            if (filter === 'all') {
+                resultsCount.textContent = '';
+            } else {
+                resultsCount.textContent = visible + ' product' + (visible !== 1 ? 's' : '') + ' shown';
+            }
+        }
+        if (mainResultsCount) {
+            mainResultsCount.textContent = visible;
+        }
+
+        // Update active button
+        buttons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = toggle.querySelector('[data-filter="' + filter + '"]');
+        if (activeBtn) activeBtn.classList.add('active');
+
+        // Persist in sessionStorage
+        try { sessionStorage.setItem('allergenFilter', filter); } catch(e) {}
+    }
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            applyFilter(this.getAttribute('data-filter'));
+        });
+    });
+
+    // Restore filter from session
+    try {
+        const saved = sessionStorage.getItem('allergenFilter');
+        if (saved && (saved === 'safe' || saved === 'not-safe')) {
+            applyFilter(saved);
+        }
+    } catch(e) {}
+})();
 </script>
 
 <script src="/js/cart.js"></script>
