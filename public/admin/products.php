@@ -1,8 +1,8 @@
 <?php
 error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors', 0);
-require_once __DIR__ . '/../../src/helpers/functions.php';
-require_once __DIR__ . '/../../src/controllers/AdminController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/AdminController.php';
 
 if (!isAdmin()) {
     header('Location: /login.php');
@@ -39,7 +39,7 @@ $categories = $adminController->getAllCategories();
 
 ?>
 
-<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
 
 <div class="admin-container">
     <div class="admin-header-flex brass-panel">

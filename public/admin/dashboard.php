@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../src/helpers/functions.php';
-require_once __DIR__ . '/../../src/controllers/AdminController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/AdminController.php';
 
 // Strict admin check
 if (!isAdmin()) {
@@ -11,7 +11,7 @@ $adminController = new AdminController();
 $metrics = $adminController->getDashboardMetrics();
 ?>
 
-<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
 
 <main class="admin-dashboard-main">
     <div class="admin-dashboard-container">
@@ -608,4 +608,4 @@ $metrics = $adminController->getDashboardMetrics();
 }
 </style>
 
-<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/footer.php'; ?>

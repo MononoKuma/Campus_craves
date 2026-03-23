@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../src/helpers/functions.php';
-require_once __DIR__ . '/../../src/controllers/AdminController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/AdminController.php';
 
 // Strict admin check
 if (!isAdmin()) {
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 $pendingVerifications = $adminController->getPendingVerifications();
 ?>
 
-<?php require_once __DIR__ . '/../../src/views/partials/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
 
 <div class="brass-panel admin-dashboard">
     <div class="admin-header-flex">
@@ -108,7 +108,7 @@ $pendingVerifications = $adminController->getPendingVerifications();
     </div>
 </div>
 
-<?php require_once __DIR__ . '/../../src/views/partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/footer.php'; ?>
 
 <style>
 .verification-grid {

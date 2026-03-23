@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="modern-theme">
-    <?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+    <?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
     
     <main class="profile-main">
         <div class="profile-container">
@@ -334,7 +334,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         </div>
     </main>
 
-    <?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+    <?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>
 
     <style>
         /* Modern Profile Layout */
