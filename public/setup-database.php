@@ -1,6 +1,6 @@
 <?php
 // Database setup script for PostgreSQL
-require_once '../src/config/database.php';
+require_once __DIR__ . '/src/config/database.php';
 
 echo "🚀 Setting up PostgreSQL database...\n\n";
 
@@ -18,7 +18,7 @@ try {
     echo "   Type: " . (getenv('DB_TYPE') ?: 'auto-detected') . "\n\n";
     
     // Read the PostgreSQL schema file
-    $schemaFile = '../postgresql-init.sql';
+    $schemaFile = __DIR__ . '/postgresql-init.sql';
     if (!file_exists($schemaFile)) {
         echo "❌ Schema file not found: $schemaFile\n";
         exit;

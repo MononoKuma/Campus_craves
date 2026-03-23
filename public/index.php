@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once __DIR__ . './../src/config/database.php';
-require_once __DIR__ . './../src/views/partials/header.php';
-require_once __DIR__ . '/../src/helpers/functions.php';
+require_once __DIR__ . '/src/config/database.php';
+require_once __DIR__ . '/src/views/partials/header.php';
+require_once __DIR__ . '/src/helpers/functions.php';
 ?>
 
 <!-- Hero Section -->
@@ -142,4 +142,4 @@ require_once __DIR__ . '/../src/helpers/functions.php';
     </div>
 </section>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>

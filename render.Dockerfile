@@ -33,6 +33,7 @@ WORKDIR /var/www/html
 # Copy application files
 COPY public/ /var/www/html/
 COPY src/ /var/www/html/src/
+COPY postgresql-init.sql /var/www/html/postgresql-init.sql
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
