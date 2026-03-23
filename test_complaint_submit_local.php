@@ -1,6 +1,6 @@
 <?php
-// Simple complaint submission test for Render.com
-// Upload this file and access via: your-domain.com/test_complaint_submit.php
+// Local complaint submission test for Docker environment
+// Run with: php test_complaint_submit_local.php
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -10,7 +10,15 @@ session_start();
 
 header('Content-Type: text/plain');
 
-echo "=== COMPLAINT SUBMISSION TEST ===\n\n";
+echo "=== COMPLAINT SUBMISSION TEST (LOCAL DOCKER) ===\n\n";
+
+// Override database config for local Docker
+putenv('DB_HOST=db');
+putenv('DB_PORT=5432');
+putenv('DB_NAME=capus_craves');
+putenv('DB_USER=postgres');
+putenv('DB_PASSWORD=postgres');
+putenv('DB_TYPE=pgsql');
 
 // Load required files
 require_once __DIR__ . '/src/config/database.php';
@@ -28,6 +36,7 @@ try {
 } catch (Exception $e) {
     echo "✗ Database connection failed: " . $e->getMessage() . "\n";
     echo "✗ Error code: " . $e->getCode() . "\n";
+    echo "✗ Make sure Docker is running with: docker-compose up -d\n";
     exit(1);
 }
 

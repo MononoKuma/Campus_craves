@@ -87,26 +87,39 @@ class ComplaintController {
     }
 
     private function checkDuplicateComplaint($data) {
-        $stmt = $this->db->prepare("
+        $sql = "
             SELECT id FROM complaints 
             WHERE complainant_id = ? 
             AND respondent_id = ? 
             AND complaint_type = ? 
-            AND (order_id = ? OR (order_id IS NULL AND ? IS NULL))
-            AND (product_id = ? OR (product_id IS NULL AND ? IS NULL))
-            AND created_at > DATE_SUB(NOW(), INTERVAL 24 HOUR)
+            AND created_at > NOW() - INTERVAL '24 hours'
             AND status IN ('pending', 'investigating')
-        ");
+        ";
         
-        $stmt->execute([
+        $params = [
             $data['complainant_id'],
             $data['respondent_id'],
-            $data['complaint_type'],
-            $data['order_id'] ?? null,
-            $data['order_id'] ?? null,
-            $data['product_id'] ?? null,
-            $data['product_id'] ?? null
-        ]);
+            $data['complaint_type']
+        ];
+        
+        // Add order_id condition if provided
+        if (!empty($data['order_id'])) {
+            $sql .= " AND order_id = ?";
+            $params[] = $data['order_id'];
+        } else {
+            $sql .= " AND order_id IS NULL";
+        }
+        
+        // Add product_id condition if provided
+        if (!empty($data['product_id'])) {
+            $sql .= " AND product_id = ?";
+            $params[] = $data['product_id'];
+        } else {
+            $sql .= " AND product_id IS NULL";
+        }
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
         
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

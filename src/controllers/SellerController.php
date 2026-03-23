@@ -273,14 +273,14 @@ class SellerController {
         // Get monthly sales for the last 6 months
         $monthlySalesStmt = $this->db->prepare("
             SELECT 
-                DATE_FORMAT(o.created_at, '%Y-%m') as month,
+                TO_CHAR(o.created_at, 'YYYY-MM') as month,
                 SUM(oi.quantity * oi.unit_price) as sales
             FROM orders o
             JOIN order_items oi ON o.id = oi.order_id
             JOIN products p ON oi.product_id = p.id
             WHERE p.seller_id = ? AND o.status = 'completed'
-                AND o.created_at >= DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH)
-            GROUP BY DATE_FORMAT(o.created_at, '%Y-%m')
+                AND o.created_at >= CURRENT_DATE - INTERVAL '6 months'
+            GROUP BY TO_CHAR(o.created_at, 'YYYY-MM')
             ORDER BY month
         ");
         $monthlySalesStmt->execute([$sellerId]);

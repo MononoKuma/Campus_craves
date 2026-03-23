@@ -22,8 +22,12 @@ function loadEnv($file) {
     return true;
 }
 
-// Load environment variables
-loadEnv(__DIR__ . '/../../.env');
+// Load environment variables - prioritize .env.local if it exists
+$envFile = __DIR__ . '/../../.env.local';
+if (!file_exists($envFile)) {
+    $envFile = __DIR__ . '/../../.env';
+}
+loadEnv($envFile);
 
 class Database {
     private $host;

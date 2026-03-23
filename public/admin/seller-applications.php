@@ -107,85 +107,182 @@ $pendingApplications = $adminController->getPendingSellerApplications();
 <style>
 .applications-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 1.5rem;
     margin-top: 2rem;
 }
 
 .application-card {
-    background: var(--parchment);
-    border: 2px solid var(--copper);
-    border-radius: 8px;
-    padding: 1.5rem;
+    background: var(--white);
+    border: 1px solid var(--medium-gray);
+    border-radius: 16px;
+    padding: 2rem;
     position: relative;
+    box-shadow: 0 4px 6px var(--shadow);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.application-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+}
+
+.application-card:hover {
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+    transform: translateY(-2px);
+}
+
+.application-header {
+    margin-bottom: 1.5rem;
 }
 
 .application-header h3 {
-    color: var(--copper);
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
 .application-header p {
-    color: var(--dark-wood);
-    margin-bottom: 0.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
 .application-header small {
-    color: #666;
-    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.application-header small::before {
+    content: '📅';
+    font-size: 0.9rem;
 }
 
 .application-reason {
-    margin: 1rem 0;
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: var(--light-gray);
+    border-radius: 12px;
+    border: 1px solid var(--medium-gray);
 }
 
 .application-reason h4 {
-    color: var(--dark-wood);
-    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.application-reason h4::before {
+    content: '💼';
+    font-size: 1.1rem;
 }
 
 .application-reason p {
-    background: rgba(245, 231, 208, 0.5);
-    padding: 0.75rem;
-    border-radius: 4px;
-    border-left: 3px solid var(--copper);
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-size: 0.95rem;
     white-space: pre-wrap;
+    margin: 0;
+    padding: 0;
 }
 
 .application-actions {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     flex-wrap: wrap;
 }
 
 .application-form {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
 }
 
 .rejection-form {
     flex-direction: column;
     align-items: stretch;
+    flex: 1;
 }
 
 .rejection-reason {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 .rejection-reason textarea {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--copper);
-    border-radius: 4px;
+    padding: 0.75rem;
+    border: 2px solid var(--medium-gray);
+    border-radius: 8px;
     font-family: inherit;
+    font-size: 0.9rem;
     resize: vertical;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background: var(--white);
+}
+
+.rejection-reason textarea:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.modern-button.small {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modern-button.small:not(.danger) {
+    background: var(--primary-blue);
+    color: var(--white);
+}
+
+.modern-button.small:not(.danger):hover {
+    background: var(--dark-blue);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.modern-button.small.danger {
+    background: #ef4444;
+    color: var(--white);
+}
+
+.modern-button.small.danger:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 @media (max-width: 768px) {
     .applications-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
     .application-actions {
@@ -198,6 +295,21 @@ $pendingApplications = $adminController->getPendingSellerApplications();
     
     .modern-button.small {
         width: 100%;
+        justify-content: center;
+    }
+    
+    .application-card {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .application-card {
+        padding: 1rem;
+    }
+    
+    .applications-grid {
+        gap: 0.75rem;
     }
 }
 </style>
