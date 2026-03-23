@@ -7,10 +7,19 @@ try {
     $conn = $db->connect();
     echo "✅ Database connection successful!\n";
     
-    // Test query
-    $stmt = $conn->query("SELECT COUNT(*) as count FROM users");
+    // Check if users table exists
+    $stmt = $conn->query("SELECT COUNT(*) as count FROM information_schema.tables WHERE table_name = 'users'");
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    echo "📊 Users table count: " . $result['count'] . "\n";
+    
+    if ($result['count'] > 0) {
+        // Test query on users table
+        $stmt = $conn->query("SELECT COUNT(*) as count FROM users");
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        echo "📊 Users table count: " . $result['count'] . "\n";
+        echo "🎉 Database is ready!\n";
+    } else {
+        echo "⚠️ Tables not created yet. Run the PostgreSQL init script first.\n";
+    }
     
 } catch (Exception $e) {
     echo "❌ Database connection failed: " . $e->getMessage() . "\n";

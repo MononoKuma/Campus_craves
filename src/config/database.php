@@ -21,22 +21,23 @@ class Database {
     public function connect() {
         if ($this->conn === null) {
             try {
+                $dsn = $this->db_type === 'mysql' 
+                    ? "mysql:host={$this->host};port={$this->port};dbname={$this->db_name};charset=utf8mb4"
+                    : "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name}";
+                
+                $options = [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_TIMEOUT => 10,
+                ];
+                
                 if ($this->db_type === 'mysql') {
-                    $this->conn = new PDO(
-                        "mysql:host={$this->host};port={$this->port};dbname={$this->db_name}",
-                        $this->username,
-                        $this->password
-                    );
-                } elseif ($this->db_type === 'pgsql') {
-                    $this->conn = new PDO(
-                        "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name}",
-                        $this->username,
-                        $this->password
-                    );
-                } else {
-                    throw new Exception("Unsupported database type: {$this->db_type}");
+                    $options[PDO::MYSQL_ATTR_RECONNECT] = true;
                 }
-                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                
+                $this->conn = new PDO($dsn, $this->username, $this->password, $options);
+                
             } catch(PDOException $e) {
                 error_log("Database connection failed: " . $e->getMessage());
                 throw new Exception("Database connection failed. Please check your configuration.");
