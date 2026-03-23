@@ -34,7 +34,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
                 <div class="hero-buttons">
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <a href="dashboard.php" class="hero-button primary">Browse Menu</a>
-                        <a href="profile.php" class="hero-button secondary">My Profile</a>
+                        <?php if (!isAdmin()): ?>
+                            <a href="profile.php" class="hero-button secondary">My Profile</a>
+                        <?php else: ?>
+                            <a href="/admin/dashboard.php" class="hero-button secondary">Admin Dashboard</a>
+                        <?php endif; ?>
                     <?php else: ?>
                         <a href="register.php" class="hero-button primary">Get Started</a>
                         <a href="login.php" class="hero-button secondary">Sign In</a>
