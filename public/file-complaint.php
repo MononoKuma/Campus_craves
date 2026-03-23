@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/ComplaintController.php';
+require_once __DIR__ . '/src/helpers/functions.php';
+require_once __DIR__ . '/src/controllers/ComplaintController.php';
 
 // Redirect if not logged in
 if (!isLoggedIn()) {
@@ -63,7 +63,7 @@ $preselectedType = $_GET['type'] ?? null;
 // If product is preselected, get product details and seller info
 $productDetails = null;
 if ($preselectedProduct) {
-    require_once __DIR__ . '/../src/models/Product.php';
+    require_once __DIR__ . '/src/models/Product.php';
     $productModel = new Product();
     $productDetails = $productModel->getProductById($preselectedProduct);
     if ($productDetails && $productDetails['seller_id']) {
@@ -72,7 +72,7 @@ if ($preselectedProduct) {
 }
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <main class="complaint-main">
     <div class="complaint-container">
@@ -451,4 +451,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>

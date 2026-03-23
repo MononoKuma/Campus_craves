@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/CartController.php';
+require_once __DIR__ . '/src/helpers/functions.php';
+require_once __DIR__ . '/src/controllers/CartController.php';
 
 // Redirect if not logged in
 if (!isLoggedIn()) {
@@ -94,7 +94,7 @@ function getProductImageUrl($imagePath) {
 }
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <link rel="stylesheet" href="/css/cart.css">
 <script src="/js/cart-page.js" defer></script>
@@ -886,4 +886,4 @@ function getProductImageUrl($imagePath) {
 </style>
 
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>

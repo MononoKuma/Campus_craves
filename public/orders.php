@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/models/Orders.php';
-require_once __DIR__ . '/../src/models/Review.php';
-require_once __DIR__ . '/../src/controllers/ReviewController.php';
+require_once __DIR__ . '/src/helpers/functions.php';
+require_once __DIR__ . '/src/models/Orders.php';
+require_once __DIR__ . '/src/models/Review.php';
+require_once __DIR__ . '/src/controllers/ReviewController.php';
 
 // Redirect if not logged in
 if (!isLoggedIn()) {
@@ -67,7 +67,7 @@ function formatOrderStatus($status) {
 }
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <main class="orders-main">
     <div class="orders-container">
@@ -515,7 +515,7 @@ function formatOrderStatus($status) {
         });
         </script>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>
 
 <style>
 /* Orders Page Layout */

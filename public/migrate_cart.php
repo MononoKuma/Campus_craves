@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../src/config/database.php';
-require_once __DIR__ . '/../src/models/Cart.php';
-require_once __DIR__ . '/../src/models/Product.php';
+require_once __DIR__ . '/src/config/database.php';
+require_once __DIR__ . '/src/models/Cart.php';
+require_once __DIR__ . '/src/models/Product.php';
 
 /**
  * Migrate existing session cart data to database

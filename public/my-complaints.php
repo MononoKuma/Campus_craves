@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/ComplaintController.php';
+require_once __DIR__ . '/src/helpers/functions.php';
+require_once __DIR__ . '/src/controllers/ComplaintController.php';
 
 // Redirect if not logged in
 if (!isLoggedIn()) {
@@ -51,7 +51,7 @@ if (isset($_GET['detail']) && is_numeric($_GET['detail'])) {
 $complaintTypes = $complaintController->getComplaintTypes();
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <main class="complaints-main">
     <div class="complaints-container">
@@ -690,4 +690,4 @@ $complaintTypes = $complaintController->getComplaintTypes();
 }
 </style>
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>

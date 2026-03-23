@@ -1,9 +1,9 @@
 <?php
-require_once __DIR__ . '/../src/helpers/functions.php';
-require_once __DIR__ . '/../src/controllers/ProductController.php';
-require_once __DIR__ . '/../src/controllers/CartController.php';
-require_once __DIR__ . '/../src/helpers/review_helpers.php';
-require_once __DIR__ . '/../src/models/Users.php';
+require_once __DIR__ . '/src/helpers/functions.php';
+require_once __DIR__ . '/src/controllers/ProductController.php';
+require_once __DIR__ . '/src/controllers/CartController.php';
+require_once __DIR__ . '/src/helpers/review_helpers.php';
+require_once __DIR__ . '/src/models/Users.php';
 
 // Redirect if not logged in
 if (!isLoggedIn()) {
@@ -72,7 +72,7 @@ function getProductImageUrl($imagePath) {
 
 ?>
 
-<?php require_once __DIR__ . '/../src/views/partials/header.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
 
 <!-- Ban Notice Modal -->
 <?php if ($showBanNotice): ?>
@@ -732,7 +732,7 @@ function getProductImageUrl($imagePath) {
     transform: none;
 }
 
-<?php require_once __DIR__ . '/../src/views/partials/footer.php'; ?>
+<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>
 
 <script>
 // Ban notice handling
