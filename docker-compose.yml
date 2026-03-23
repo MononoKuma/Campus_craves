@@ -13,6 +13,7 @@ services:
       - DB_NAME=${DB_NAME:-capus_craves}
       - DB_USER=${DB_USER:-capus_user}
       - DB_PASSWORD=${DB_PASSWORD:-your_secure_user_password}
+      - DB_TYPE=pgsql
     depends_on:
       - db
     networks:

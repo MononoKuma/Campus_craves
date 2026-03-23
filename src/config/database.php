@@ -43,7 +43,7 @@ class Database {
                 ];
                 
                 if ($this->db_type === 'mysql' && defined('PDO::MYSQL_ATTR_RECONNECT')) {
-                    $options[PDO::MYSQL_ATTR_RECONNECT] = true;
+                    $options[constant('PDO::MYSQL_ATTR_RECONNECT')] = true;
                 }
                 
                 $this->conn = new PDO($dsn, $this->username, $this->password, $options);
