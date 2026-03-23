@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS steampunk_construction;
-USE steampunk_construction;
+CREATE DATABASE IF NOT EXISTS capus_craves;
+USE capus_craves;
 
 -- Users table
 CREATE TABLE users (
@@ -14,11 +14,11 @@ CREATE TABLE users (
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role ENUM('customer', 'admin', 'seller') DEFAULT 'customer',
-    status ENUM('active', 'banned', 'suspended') DEFAULT 'active' AFTER role,
-    ban_reason TEXT NULL AFTER status,
-    banned_at TIMESTAMP NULL DEFAULT NULL AFTER ban_reason,
-    suspended_at TIMESTAMP NULL DEFAULT NULL AFTER banned_at,
-    suspension_ends TIMESTAMP NULL DEFAULT NULL AFTER suspended_at,
+    status ENUM('active', 'banned', 'suspended') DEFAULT 'active',
+    ban_reason TEXT NULL,
+    banned_at TIMESTAMP NULL DEFAULT NULL,
+    suspended_at TIMESTAMP NULL DEFAULT NULL,
+    suspension_ends TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
@@ -67,11 +67,11 @@ CREATE TABLE orders (
     status ENUM('cart', 'pending', 'completed', 'shipped', 'cancelled') DEFAULT 'cart',
     total_amount DECIMAL(10,2),
     payment_method VARCHAR(50),
-    delivery_mode ENUM('delivery', 'meetup') DEFAULT 'delivery' AFTER payment_method,
-    delivery_address TEXT AFTER delivery_mode,
-    delivery_notes TEXT AFTER delivery_address,
-    meetup_time DATETIME AFTER delivery_notes,
-    meetup_place VARCHAR(255) AFTER meetup_time,
+    delivery_mode ENUM('delivery', 'meetup') DEFAULT 'delivery',
+    delivery_address TEXT,
+    delivery_notes TEXT,
+    meetup_time DATETIME,
+    meetup_place VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
@@ -173,50 +173,26 @@ CREATE TABLE IF NOT EXISTS cart_items (
 );
 
 -- Add rating columns to products table for performance
-ALTER TABLE products ADD COLUMN IF NOT EXISTS average_rating DECIMAL(3,2) DEFAULT 0.00;
-ALTER TABLE products ADD COLUMN IF NOT EXISTS review_count INT DEFAULT 0;
+ALTER TABLE products ADD COLUMN average_rating DECIMAL(3,2) DEFAULT 0.00;
+ALTER TABLE products ADD COLUMN review_count INT DEFAULT 0;
 
 -- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_reviews_product_id ON reviews(product_id);
-CREATE INDEX IF NOT EXISTS idx_reviews_user_id ON reviews(user_id);
-CREATE INDEX IF NOT EXISTS idx_reviews_rating ON reviews(rating);
-CREATE INDEX IF NOT EXISTS idx_reviews_created_at ON reviews(created_at);
+CREATE INDEX idx_reviews_product_id ON reviews(product_id);
+CREATE INDEX idx_reviews_user_id ON reviews(user_id);
+CREATE INDEX idx_reviews_rating ON reviews(rating);
+CREATE INDEX idx_reviews_created_at ON reviews(created_at);
 
 -- Indexes for user status and suspension
-CREATE INDEX IF NOT EXISTS idx_users_status ON users(status);
-CREATE INDEX IF NOT EXISTS idx_users_suspension_ends ON users(suspension_ends);
+CREATE INDEX idx_users_status ON users(status);
+CREATE INDEX idx_users_suspension_ends ON users(suspension_ends);
 
 -- Indexes for cart table performance
-CREATE INDEX IF NOT EXISTS idx_cart_user ON cart_items(user_id);
-CREATE INDEX IF NOT EXISTS idx_cart_session ON cart_items(session_id);
-CREATE INDEX IF NOT EXISTS idx_cart_product ON cart_items(product_id);
+CREATE INDEX idx_cart_user ON cart_items(user_id);
+CREATE INDEX idx_cart_session ON cart_items(session_id);
+CREATE INDEX idx_cart_product ON cart_items(product_id);
 
 INSERT INTO users (first_name, last_name, birthday, address, email, phone, username, password, role) VALUES
-('Admin', 'Admin', '1990-01-01', 'Admin Address', 'admin2@steampunk.com', '555-0000', 'admin', 'admin', 'admin'),
-('John', 'Doe', '1992-05-15', '123 Main St', 'john.doe@example.com', '555-0001', 'johndoe', 'password123', 'customer'),
-('Jane', 'Smith', '1988-08-22', '456 Oak Ave', 'jane.smith@example.com', '555-0002', 'janesmith', 'password123', 'seller'),
-('Bob', 'Wilson', '1995-03-10', '789 Pine Rd', 'bob.wilson@example.com', '555-0003', 'bobwilson', 'password123', 'customer'),
-('Alice', 'Brown', '1990-12-05', '321 Elm St', 'alice.brown@example.com', '555-0004', 'alicebrown', 'password123', 'customer');
-
--- Sample products for testing
-INSERT INTO products (name, description, price, stock_quantity, seller_id, image_path) VALUES
-('Brass Gear Set', 'High-quality brass gear set perfect for steampunk constructions', 24.99, 15, 3, 'products/gear-set.jpg'),
-('Clockwork Mechanism', 'Precision-made clockwork mechanism for intricate assemblies', 32.75, 12, 3, 'products/clockwork.jpg'),
-('Steam Pipe Fittings', 'Copper steam pipe fittings for industrial projects', 18.50, 25, 3, 'products/pipes.jpg'),
-('Victorian Lamp', 'Decorative Victorian-style lamp with brass accents', 89.99, 8, 3, 'products/lamp.jpg');
-
--- Sample orders for testing
-INSERT INTO orders (user_id, status, total_amount, payment_method, delivery_mode, delivery_address) VALUES
-(2, 'completed', 57.74, 'credit_card', 'delivery', '123 Main St, City, State 12345'),
-(4, 'shipped', 18.50, 'paypal', 'delivery', '789 Pine Rd, Town, State 67890'),
-(5, 'pending', 89.99, 'credit_card', 'meetup', NULL);
-
--- Sample order items
-INSERT INTO order_items (order_id, product_id, quantity, unit_price) VALUES
-(1, 1, 2, 24.99),
-(1, 2, 1, 32.75),
-(2, 3, 1, 18.50),
-(3, 4, 1, 89.99);
+('Admin', 'Admin', '1990-01-01', 'Admin Address', 'admin2@campuscraves.com', '555-0000', 'admin', 'admin', 'admin');
 
 -- Update existing users to have 'active' status
 UPDATE users SET status = 'active' WHERE status IS NULL;

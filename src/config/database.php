@@ -8,9 +8,9 @@ class Database {
 
     public function __construct() {
         $this->host = getenv('DB_HOST') ?: 'db';
-        $this->db_name = getenv('DB_NAME') ?: 'steampunk_construction';
-        $this->username = getenv('DB_USER') ?: 'steam_user';
-        $this->password = getenv('DB_PASSWORD') ?: 'gear_pass';
+        $this->db_name = getenv('DB_NAME') ?: 'capus_craves';
+        $this->username = getenv('DB_USER') ?: 'capus_user';
+        $this->password = getenv('DB_PASSWORD') ?: 'your_secure_user_password';
         $this->conn = null;
     }
 

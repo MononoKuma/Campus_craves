@@ -10,9 +10,9 @@ services:
       - ./src:/var/www/src 
     environment:
       - DB_HOST=db
-      - DB_NAME=${DB_NAME:-steampunk_construction}
-      - DB_USER=${DB_USER:-steam_user}
-      - DB_PASSWORD=${DB_PASSWORD:-gear_pass}
+      - DB_NAME=${DB_NAME:-capus_craves}
+      - DB_USER=${DB_USER:-capus_user}
+      - DB_PASSWORD=${DB_PASSWORD:-your_secure_user_password}
     depends_on:
       - db
     networks:
@@ -24,10 +24,10 @@ services:
     ports:
       - "127.0.0.1:3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_pass}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-steampunk_construction}
-      MYSQL_USER: ${MYSQL_USER:-steam_user}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-gear_pass}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-your_secure_root_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-capus_craves}
+      MYSQL_USER: ${MYSQL_USER:-capus_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-your_secure_user_password}
     volumes:
       - db_data:/var/lib/mysql
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
