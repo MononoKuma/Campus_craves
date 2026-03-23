@@ -154,6 +154,14 @@ CREATE TABLE IF NOT EXISTS cart_items (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- System settings table
+CREATE TABLE IF NOT EXISTS system_settings (
+    key VARCHAR(100) PRIMARY KEY,
+    value TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Add rating columns to products table
 ALTER TABLE products ADD COLUMN IF NOT EXISTS average_rating DECIMAL(3,2) DEFAULT 0.00;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS review_count INT DEFAULT 0;
@@ -168,6 +176,10 @@ CREATE INDEX IF NOT EXISTS idx_users_suspension_ends ON users(suspension_ends);
 CREATE INDEX IF NOT EXISTS idx_cart_user ON cart_items(user_id);
 CREATE INDEX IF NOT EXISTS idx_cart_session ON cart_items(session_id);
 CREATE INDEX IF NOT EXISTS idx_cart_product ON cart_items(product_id);
+
+-- Insert default system settings
+INSERT INTO system_settings (key, value) VALUES ('store_visibility_mode', 'show_all')
+ON CONFLICT (key) DO NOTHING;
 
 -- Insert default admin user
 INSERT INTO users (first_name, last_name, birthday, address, email, phone, username, password, role) 

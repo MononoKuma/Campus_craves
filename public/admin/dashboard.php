@@ -1,6 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/AdminController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/models/SystemSettings.php';
 
 // Strict admin check
 if (!isAdmin()) {
@@ -8,7 +9,17 @@ if (!isAdmin()) {
 }
 
 $adminController = new AdminController();
+$systemSettings = new SystemSettings();
 $metrics = $adminController->getDashboardMetrics();
+$storeVisibilityMode = $systemSettings->getStoreVisibilityMode();
+
+// Handle store visibility toggle
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_store_visibility'])) {
+    $newMode = $systemSettings->toggleStoreVisibilityMode();
+    $modeText = $newMode === 'available_only' ? 'Available Stores Only' : 'All Stores';
+    setFlashMessage("Store visibility mode changed to: $modeText", 'success');
+    redirect('/admin/dashboard.php');
+}
 ?>
 
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
@@ -119,6 +130,44 @@ $metrics = $adminController->getDashboardMetrics();
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- Store Visibility Control Card -->
+            <div class="admin-dashboard-card store-visibility-control">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Store Visibility</h2>
+                </div>
+                <div class="card-content">
+                    <form method="POST" class="visibility-form">
+                        <input type="hidden" name="toggle_store_visibility" value="1">
+                        <div class="visibility-status">
+                            <div class="current-mode">
+                                <span class="mode-label">Current Mode:</span>
+                                <span class="mode-value <?= $storeVisibilityMode === 'available_only' ? 'mode-restricted' : 'mode-open' ?>">
+                                    <?= $storeVisibilityMode === 'available_only' ? '🟢 Available Stores Only' : '🔵 All Stores Visible' ?>
+                                </span>
+                            </div>
+                            <p class="mode-description">
+                                <?= $storeVisibilityMode === 'available_only' 
+                                    ? 'Only products from sellers with available stores are shown to customers.' 
+                                    : 'All seller products are visible regardless of store availability status.' ?>
+                            </p>
+                        </div>
+                        <button type="submit" class="visibility-toggle-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            Toggle Visibility Mode
+                        </button>
+                    </form>
                 </div>
             </div>
 
@@ -297,7 +346,7 @@ $metrics = $adminController->getDashboardMetrics();
 .admin-dashboard-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto auto;
     gap: 2rem;
     flex: 1;
 }
@@ -311,9 +360,14 @@ $metrics = $adminController->getDashboardMetrics();
     grid-row: 2;
 }
 
-.admin-actions {
+.store-visibility-control {
     grid-column: 2;
     grid-row: 2;
+}
+
+.admin-actions {
+    grid-column: 1 / -1;
+    grid-row: 3;
 }
 
 /* Admin Dashboard Cards */
@@ -605,6 +659,87 @@ $metrics = $adminController->getDashboardMetrics();
     .metrics-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+}
+
+/* Store Visibility Control Styles */
+.visibility-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.visibility-status {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.current-mode {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border: 1px solid var(--medium-gray);
+    border-radius: 12px;
+}
+
+.mode-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.mode-value {
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.mode-value.mode-restricted {
+    background: rgba(34, 197, 94, 0.1);
+    color: #166534;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.mode-value.mode-open {
+    background: rgba(37, 99, 235, 0.1);
+    color: #1e40af;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.mode-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0 0.5rem;
+}
+
+.visibility-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.visibility-toggle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.visibility-toggle-btn:active {
+    transform: translateY(0);
 }
 </style>
 

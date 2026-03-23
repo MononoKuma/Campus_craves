@@ -47,6 +47,14 @@ $cartController = new CartController();
 // Get featured products
 $featuredProducts = $productController->index();
 
+// Get user allergens if logged in
+$userAllergens = [];
+if (isLoggedIn() && $currentUser) {
+    if ($currentUser['allergens']) {
+        $userAllergens = json_decode($currentUser['allergens'], true) ?: [];
+    }
+}
+
 // Get cart items
 $cartItems = $cartController->getCart();
 
@@ -172,9 +180,25 @@ function getProductImageUrl($imagePath) {
                                          class="product-image">
                                     <div class="product-overlay">
                                         <?php if ($product['stock_quantity'] > 0): ?>
-                                            <button type="button" class="add-to-cart-btn" data-product-id="<?= $product['id'] ?>">
-                                                Add to Cart
-                                            </button>
+                                            <?php 
+                                            // Check if product contains user's allergens before showing Add to Cart
+                                            $canAddToCart = true;
+                                            if (!empty($userAllergens) && isset($product['allergens'])) {
+                                                $productAllergens = json_decode($product['allergens'], true) ?: [];
+                                                $hasUserAllergens = !empty(array_intersect($productAllergens, $userAllergens));
+                                                $canAddToCart = !$hasUserAllergens;
+                                            }
+                                            ?>
+                                            <?php if ($canAddToCart): ?>
+                                                <button type="button" class="add-to-cart-btn" data-product-id="<?= $product['id'] ?>">
+                                                    Add to Cart
+                                                </button>
+                                            <?php else: ?>
+                                                <button type="button" class="add-to-cart-btn disabled" 
+                                                        title="This product contains your allergens" disabled>
+                                                    ⚠️ Allergen Alert
+                                                </button>
+                                            <?php endif; ?>
                                         <?php else: ?>
                                             <span class="out-of-stock-badge">Out of Stock</span>
                                         <?php endif; ?>
@@ -183,6 +207,21 @@ function getProductImageUrl($imagePath) {
                                 <div class="product-info">
                                     <h3 class="product-name"><?= htmlspecialchars($product['name']) ?></h3>
                                     <?php displayProductRating($product, true, 'small'); ?>
+                                    
+                                    <?php 
+                                    // Show allergen safety indicator for logged-in users
+                                    if (isLoggedIn() && !empty($userAllergens) && isset($product['allergens'])) {
+                                        $productAllergens = json_decode($product['allergens'], true) ?: [];
+                                        $hasUserAllergens = !empty(array_intersect($productAllergens, $userAllergens));
+                                        
+                                        if ($hasUserAllergens): ?>
+                                            <span class="allergen-warning">⚠️ Contains Your Allergens</span>
+                                        <?php else: ?>
+                                            <span class="allergen-safe">✅ Safe for You</span>
+                                        <?php endif;
+                                    }
+                                    ?>
+                                    
                                     <div class="product-meta">
                                         <span class="product-price"><?= formatPrice($product['price']) ?></span>
                                         <span class="stock-status <?= $product['stock_quantity'] > 0 ? 'in-stock' : 'out-of-stock' ?>">
@@ -416,6 +455,41 @@ function getProductImageUrl($imagePath) {
     100% {
         transform: scale(1);
     }
+}
+
+/* Allergen Safety Indicator Styles */
+.allergen-warning, .allergen-safe {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0.25rem 0;
+}
+
+.allergen-warning {
+    background: rgba(239, 68, 68, 0.1);
+    color: #991b1b;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.allergen-safe {
+    background: rgba(34, 197, 94, 0.1);
+    color: #166534;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+/* Disabled Add to Cart Button for Allergens */
+.add-to-cart-btn.disabled {
+    background: #ef4444;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.add-to-cart-btn.disabled:hover {
+    background: #dc2626;
+    transform: none;
 }
 
 /* Dashboard Grid */
