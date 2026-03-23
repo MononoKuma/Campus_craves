@@ -1,7 +1,7 @@
 <?php
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
-require_once __DIR__ . '/src/controllers/AuthController.php';
-require_once __DIR__ . '/src/helpers/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/AuthController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
 
 $auth = new AuthController();
 $error = '';
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-require_once __DIR__ . '/src/views/partials/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php';
 ?>
 
 <div class="login-container">
@@ -51,4 +51,4 @@ require_once __DIR__ . '/src/views/partials/header.php';
     </div>
 </div>
 
-<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/footer.php';

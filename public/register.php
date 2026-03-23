@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/src/controllers/AuthController.php';
-require_once __DIR__ . '/src/helpers/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/AuthController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
 
 $auth = new AuthController();
 $errors = [];
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-require_once __DIR__ . '/src/views/partials/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php';
 ?>
 
 <script src="/js/register-form.js" defer></script>
@@ -126,4 +126,4 @@ require_once __DIR__ . '/src/views/partials/header.php';
     </form>
 </div>
 
-<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/footer.php';

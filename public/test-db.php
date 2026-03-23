@@ -1,6 +1,6 @@
 <?php
 // Database connection test
-require_once __DIR__ . '/src/config/database.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/config/database.php';
 
 try {
     $db = new Database();

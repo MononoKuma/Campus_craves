@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/src/helpers/functions.php';
-require_once __DIR__ . '/src/controllers/ReviewController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/helpers/functions.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/ReviewController.php';
 
 // Redirect if not logged in
 if (!isLoggedIn()) {
@@ -80,7 +80,7 @@ $canReview = $reviewController->canUserReview($productId, $_SESSION['user_id']);
 $userReview = $reviewController->getUserReview($productId, $_SESSION['user_id']);
 
 // Get product info
-require_once __DIR__ . '/src/controllers/ProductController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/ProductController.php';
 $productController = new ProductController();
 $product = $productController->getProductById($productId);
 
@@ -89,7 +89,7 @@ if (!$product) {
 }
 ?>
 
-<?php require_once __DIR__ . '/src/views/partials/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
 
 <div class="modern-panel">
     <div class="page-header">
@@ -360,4 +360,4 @@ function deleteReview(reviewId) {
 }
 </script>
 
-<?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/footer.php'; ?>
