@@ -181,15 +181,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                             <form method="post" enctype="multipart/form-data" class="modern-form compact">
                                 <input type="hidden" name="action" value="upload_student_id">
                                 <div class="form-group">
-                                    <label for="student_id" class="file-label">
+                                    <label for="student_id" class="file-label" id="file-label-upload">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                             <polyline points="17 8 12 3 7 8"/>
                                             <line x1="12" y1="3" x2="12" y2="15"/>
                                         </svg>
-                                        Choose Student ID
+                                        <span id="file-label-text">Choose Student ID</span>
                                         <input type="file" id="student_id" name="student_id" required accept="image/jpeg,image/png">
                                     </label>
+                                    <div id="file-preview-container" class="file-preview-container" style="display:none;">
+                                        <img id="file-preview-img" class="id-preview-image" alt="Selected ID preview">
+                                        <span id="file-name-display" class="file-name-display"></span>
+                                    </div>
                                 </div>
                                 <button type="submit" class="modern-button primary full-width">Upload Student ID</button>
                             </form>
@@ -200,7 +204,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                     <p>Your student ID is being reviewed</p>
                                 </div>
                                 <?php if ($verificationStatus['student_id_image']): ?>
-                                    <a href="<?php echo htmlspecialchars($verificationStatus['student_id_image']); ?>" target="_blank" class="view-link">View Uploaded ID</a>
+                                    <div class="uploaded-id-preview">
+                                        <p class="preview-label">Your Uploaded ID:</p>
+                                        <a href="/<?php echo htmlspecialchars($verificationStatus['student_id_image']); ?>" target="_blank" class="id-preview-link">
+                                            <img src="/<?php echo htmlspecialchars($verificationStatus['student_id_image']); ?>" alt="Uploaded Student ID" class="id-preview-image">
+                                            <span class="view-overlay">Click to view full size</span>
+                                        </a>
+                                    </div>
                                 <?php endif; ?>
                             </div>
                         <?php elseif ($verificationStatus['student_verification_status'] === 'verified'): ?>
@@ -210,6 +220,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                     <p>Congratulations! Your student status is verified</p>
                                 </div>
                                 <p class="verified-date">Verified on <?php echo date('F j, Y', strtotime($verificationStatus['verified_at'])); ?></p>
+                                <?php if ($verificationStatus['student_id_image']): ?>
+                                    <div class="uploaded-id-preview">
+                                        <p class="preview-label">Your Uploaded ID:</p>
+                                        <a href="/<?php echo htmlspecialchars($verificationStatus['student_id_image']); ?>" target="_blank" class="id-preview-link">
+                                            <img src="/<?php echo htmlspecialchars($verificationStatus['student_id_image']); ?>" alt="Uploaded Student ID" class="id-preview-image">
+                                            <span class="view-overlay">Click to view full size</span>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         <?php elseif ($verificationStatus['student_verification_status'] === 'rejected'): ?>
                             <div class="verification-status compact rejected">
@@ -220,18 +239,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                 <?php if ($verificationStatus['verification_rejection_reason']): ?>
                                     <p class="rejection-reason"><strong>Reason:</strong> <?php echo htmlspecialchars($verificationStatus['verification_rejection_reason']); ?></p>
                                 <?php endif; ?>
+                                <?php if ($verificationStatus['student_id_image']): ?>
+                                    <div class="uploaded-id-preview">
+                                        <p class="preview-label">Previously Uploaded ID:</p>
+                                        <a href="/<?php echo htmlspecialchars($verificationStatus['student_id_image']); ?>" target="_blank" class="id-preview-link">
+                                            <img src="/<?php echo htmlspecialchars($verificationStatus['student_id_image']); ?>" alt="Uploaded Student ID" class="id-preview-image">
+                                            <span class="view-overlay">Click to view full size</span>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
                                 <form method="post" enctype="multipart/form-data" class="modern-form compact">
                                     <input type="hidden" name="action" value="upload_student_id">
                                     <div class="form-group">
-                                        <label for="student_id" class="file-label">
+                                        <label for="student_id_reupload" class="file-label" id="file-label-reupload">
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                                 <polyline points="17 8 12 3 7 8"/>
                                                 <line x1="12" y1="3" x2="12" y2="15"/>
                                             </svg>
-                                            Re-upload Student ID
-                                            <input type="file" id="student_id" name="student_id" required accept="image/jpeg,image/png">
+                                            <span id="file-label-text-reupload">Re-upload Student ID</span>
+                                            <input type="file" id="student_id_reupload" name="student_id" required accept="image/jpeg,image/png">
                                         </label>
+                                        <div id="file-preview-container-reupload" class="file-preview-container" style="display:none;">
+                                            <img id="file-preview-img-reupload" class="id-preview-image" alt="Selected ID preview">
+                                            <span id="file-name-display-reupload" class="file-name-display"></span>
+                                        </div>
                                     </div>
                                     <button type="submit" class="modern-button primary full-width">Re-upload Student ID</button>
                                 </form>
@@ -864,6 +896,132 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
+        /* Uploaded ID Preview Styles */
+        .uploaded-id-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .preview-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .id-preview-link {
+            position: relative;
+            display: block;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--medium-gray);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            max-width: 100%;
+        }
+
+        .id-preview-link:hover {
+            border-color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .id-preview-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            display: block;
+            border-radius: 6px;
+        }
+
+        .view-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: white;
+            padding: 1rem 0.75rem 0.5rem;
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .id-preview-link:hover .view-overlay {
+            opacity: 1;
+        }
+
+        /* File selection preview */
+        .file-preview-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(37, 99, 235, 0.05);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .file-preview-container .id-preview-image {
+            width: 80px;
+            height: 60px;
+            max-height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--medium-gray);
+            flex-shrink: 0;
+        }
+
+        .file-name-display {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .file-label.has-file {
+            border-color: var(--primary-blue);
+            background: rgba(37, 99, 235, 0.05);
+            color: var(--primary-blue);
+        }
     </style>
+
+    <script>
+        function setupFilePreview(inputId, labelTextId, previewContainerId, previewImgId, fileNameId, labelId) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            input.addEventListener('change', function() {
+                const labelText = document.getElementById(labelTextId);
+                const previewContainer = document.getElementById(previewContainerId);
+                const previewImg = document.getElementById(previewImgId);
+                const fileNameDisplay = document.getElementById(fileNameId);
+                const label = document.getElementById(labelId);
+
+                if (this.files && this.files[0]) {
+                    const file = this.files[0];
+                    fileNameDisplay.textContent = file.name;
+                    labelText.textContent = file.name;
+                    label.classList.add('has-file');
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                        previewContainer.style.display = 'flex';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewContainer.style.display = 'none';
+                    label.classList.remove('has-file');
+                }
+            });
+        }
+
+        // Setup for initial upload form
+        setupFilePreview('student_id', 'file-label-text', 'file-preview-container', 'file-preview-img', 'file-name-display', 'file-label-upload');
+        // Setup for re-upload form (rejected state)
+        setupFilePreview('student_id_reupload', 'file-label-text-reupload', 'file-preview-container-reupload', 'file-preview-img-reupload', 'file-name-display-reupload', 'file-label-reupload');
+    </script>
 </body>
 </html>

@@ -171,23 +171,6 @@ function getProductImageUrl($imagePath) {
                     </div>
                 </div>
                 <div class="card-content">
-                    <!-- Allergen Safety Filter Toggle -->
-                    <?php if (isLoggedIn()): ?>
-                    <div class="dash-allergen-toggle" id="dash-allergen-toggle">
-                        <?php if (!empty($userAllergens)): ?>
-                            <span class="dash-toggle-label">Filter:</span>
-                            <div class="dash-toggle-group">
-                                <button type="button" class="dash-toggle-btn active" data-filter="all">All</button>
-                                <button type="button" class="dash-toggle-btn safe" data-filter="safe">✅ Safe</button>
-                                <button type="button" class="dash-toggle-btn not-safe" data-filter="not-safe">⚠️ Not Safe</button>
-                            </div>
-                            <span class="dash-toggle-count" id="dash-toggle-count"></span>
-                        <?php else: ?>
-                            <span class="dash-toggle-hint">Set allergens in <a href="/profile.php">profile</a> for safety filtering</span>
-                        <?php endif; ?>
-                    </div>
-                    <?php endif; ?>
-
                     <div class="product-grid">
                         <?php foreach (array_slice($featuredProducts, 0, 6) as $product): ?>
                             <?php
@@ -829,81 +812,7 @@ function getProductImageUrl($imagePath) {
     transform: none;
 }
 
-/* Dashboard Allergen Toggle */
-.dash-allergen-toggle {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-}
 
-.dash-toggle-label {
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.dash-toggle-group {
-    display: flex;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 2px solid var(--medium-gray);
-    background: #f1f5f9;
-}
-
-.dash-toggle-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.45rem 0.9rem;
-    border: none;
-    background: transparent;
-    font-weight: 600;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.25s ease;
-    white-space: nowrap;
-}
-
-.dash-toggle-btn:hover {
-    background: rgba(37, 99, 235, 0.08);
-}
-
-.dash-toggle-btn.active {
-    background: var(--primary-blue);
-    color: white;
-}
-
-.dash-toggle-btn.safe.active {
-    background: #16a34a;
-}
-
-.dash-toggle-btn.not-safe.active {
-    background: #dc2626;
-}
-
-.dash-toggle-count {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-left: auto;
-}
-
-.dash-toggle-hint {
-    font-size: 0.82rem;
-    color: var(--text-secondary);
-}
-
-.dash-toggle-hint a {
-    color: var(--primary-blue);
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.dash-toggle-hint a:hover {
-    text-decoration: underline;
-}
 
 <?php require_once __DIR__ . '/src/views/partials/footer.php'; ?>
 
@@ -972,62 +881,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- Dashboard Allergen Safety Filter JS -->
-<script>
-(function() {
-    const toggle = document.getElementById('dash-allergen-toggle');
-    if (!toggle) return;
-    const buttons = toggle.querySelectorAll('.dash-toggle-btn[data-filter]');
-    if (!buttons.length) return;
 
-    const productGrid = document.querySelector('.product-grid');
-    if (!productGrid) return;
-
-    const countEl = document.getElementById('dash-toggle-count');
-
-    function applyFilter(filter) {
-        const cards = productGrid.querySelectorAll('.product-item');
-        let visible = 0;
-
-        cards.forEach(card => {
-            const isSafe = card.getAttribute('data-is-safe');
-            let show = true;
-
-            if (filter === 'safe') {
-                show = isSafe === 'true';
-            } else if (filter === 'not-safe') {
-                show = isSafe === 'false';
-            }
-
-            card.style.display = show ? '' : 'none';
-            if (show) visible++;
-        });
-
-        if (countEl) {
-            countEl.textContent = filter === 'all' ? '' : visible + ' shown';
-        }
-
-        buttons.forEach(btn => btn.classList.remove('active'));
-        const activeBtn = toggle.querySelector('[data-filter="' + filter + '"]');
-        if (activeBtn) activeBtn.classList.add('active');
-
-        try { sessionStorage.setItem('dashAllergenFilter', filter); } catch(e) {}
-    }
-
-    buttons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            applyFilter(this.getAttribute('data-filter'));
-        });
-    });
-
-    // Restore from session
-    try {
-        const saved = sessionStorage.getItem('dashAllergenFilter');
-        if (saved && (saved === 'safe' || saved === 'not-safe')) {
-            applyFilter(saved);
-        }
-    } catch(e) {}
-})();
-</script>
 
 <script src="/js/cart.js"></script>
