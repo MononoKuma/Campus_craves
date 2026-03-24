@@ -344,6 +344,9 @@ function getProductImageUrl(imagePath) {
     if (!imagePath) {
         return '/images/products/default.jpg';
     }
+    if (imagePath.startsWith('data:image/')) {
+        return imagePath;
+    }
     if (imagePath.includes('products/')) {
         return '/images/' + imagePath;
     }

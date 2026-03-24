@@ -31,25 +31,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Stock quantity cannot be negative.';
     }
 
-    // Handle image upload
+    // Handle image upload - store as base64 data URI in database
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (in_array($_FILES['image']['type'], $allowedTypes)) {
-            $uploadDir = '/images/products/';
-            $fileName = uniqid() . '_' . basename($_FILES['image']['name']);
-            // Use absolute path for the container filesystem
-            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . $uploadDir . $fileName;
-            
-            // Ensure the directory exists
-            $targetDir = $_SERVER['DOCUMENT_ROOT'] . '/images/products/';
-            if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0755, true);
-            }
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                $data['image_path'] = $fileName; // Store only filename, not full path
+        $fileType = $_FILES['image']['type'];
+        if (in_array($fileType, $allowedTypes)) {
+            $maxSize = 5 * 1024 * 1024; // 5MB limit
+            if ($_FILES['image']['size'] <= $maxSize) {
+                $imageData = file_get_contents($_FILES['image']['tmp_name']);
+                if ($imageData !== false) {
+                    $base64 = base64_encode($imageData);
+                    $data['image_path'] = 'data:' . $fileType . ';base64,' . $base64;
+                } else {
+                    $errors[] = 'Failed to read uploaded image.';
+                }
             } else {
-                $errors[] = 'Failed to upload image. Error: ' . $_FILES['image']['error'];
+                $errors[] = 'Image file is too large. Maximum size is 5MB.';
             }
         } else {
             $errors[] = 'Invalid image type. Only JPEG, PNG, and GIF are allowed.';

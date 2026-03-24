@@ -29,6 +29,9 @@ function getProductImageUrl($imagePath) {
     if (!$imagePath) {
         return '/images/products/default.jpg';
     }
+    if (strpos($imagePath, 'data:image/') === 0) {
+        return $imagePath;
+    }
     if (strpos($imagePath, 'products/') === 0) {
         return '/images/' . $imagePath;
     }

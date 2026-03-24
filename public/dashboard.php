@@ -60,22 +60,19 @@ $cartItems = $cartController->getCart();
 
 // Determine correct image path for each product
 function getProductImageUrl($imagePath) {
-    // Debug: Log what we're receiving
-    error_log("Image path from DB: " . ($imagePath ?? 'NULL'));
-    
     if (!$imagePath) {
         return '/images/products/default.jpg';
     }
+    // If it's a base64 data URI, return as-is
+    if (strpos($imagePath, 'data:image/') === 0) {
+        return $imagePath;
+    }
     // If path already contains 'products/', just prepend '/images/'
     if (strpos($imagePath, 'products/') === 0) {
-        $finalPath = '/images/' . $imagePath;
-    } else {
-        // Otherwise, assume it's just a filename
-        $finalPath = '/images/products/' . $imagePath;
+        return '/images/' . $imagePath;
     }
-    
-    error_log("Final image URL: " . $finalPath);
-    return $finalPath;
+    // Otherwise, assume it's just a filename
+    return '/images/products/' . $imagePath;
 }
 
 ?>

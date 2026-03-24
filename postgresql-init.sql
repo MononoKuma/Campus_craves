@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS products (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
-    image_path VARCHAR(255),
+    image_path TEXT,
     stock_quantity INT NOT NULL,
     seller_id INT REFERENCES users(id),
     allergens JSONB NULL,
@@ -173,6 +173,9 @@ CREATE TABLE IF NOT EXISTS cart_items (
 -- Add rating columns to products table
 ALTER TABLE products ADD COLUMN IF NOT EXISTS average_rating DECIMAL(3,2) DEFAULT 0.00;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS review_count INT DEFAULT 0;
+
+-- Change image_path to TEXT to support base64 data URIs
+ALTER TABLE products ALTER COLUMN image_path TYPE TEXT;
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_reviews_product_id ON reviews(product_id);

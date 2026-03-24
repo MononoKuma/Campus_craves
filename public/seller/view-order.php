@@ -148,7 +148,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 <div class="order-item">
                     <div class="item-image">
                         <?php if ($item['image_path']): ?>
-                            <img src="/images/products/<?= htmlspecialchars($item['image_path']) ?>" 
+                            <?php
+                            $itemImgPath = $item['image_path'];
+                            if (strpos($itemImgPath, 'data:image/') === 0) {
+                                $itemImgSrc = $itemImgPath;
+                            } else {
+                                $itemImgSrc = '/images/products/' . htmlspecialchars($itemImgPath);
+                            }
+                            ?>
+                            <img src="<?= $itemImgSrc ?>" 
                                  alt="<?= htmlspecialchars($item['product_name']) ?>">
                         <?php else: ?>
                             <div class="no-image">📦</div>

@@ -131,6 +131,7 @@ try {
         'index: cart_user' => "CREATE INDEX IF NOT EXISTS idx_cart_user ON cart_items(user_id);",
         'index: cart_session' => "CREATE INDEX IF NOT EXISTS idx_cart_session ON cart_items(session_id);",
         'index: cart_product' => "CREATE INDEX IF NOT EXISTS idx_cart_product ON cart_items(product_id);",
+        'products image_path to TEXT' => "ALTER TABLE products ALTER COLUMN image_path TYPE TEXT;",
     ];
 
     // Run each migration

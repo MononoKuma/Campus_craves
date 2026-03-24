@@ -136,7 +136,17 @@ $categories = $adminController->getAllCategories();
                 <?php foreach ($products as $product): ?>
                 <div class="admin-product-card">
                     <div class="admin-product-image">
-                        <img src="/images/products/<?= $product['image_path'] ?>" 
+                        <?php
+                        $imgPath = $product['image_path'] ?? '';
+                        if (strpos($imgPath, 'data:image/') === 0) {
+                            $imgSrc = $imgPath;
+                        } elseif ($imgPath) {
+                            $imgSrc = '/images/products/' . $imgPath;
+                        } else {
+                            $imgSrc = '/images/products/default.jpg';
+                        }
+                        ?>
+                        <img src="<?= $imgSrc ?>" 
                              alt="<?= htmlspecialchars($product['name']) ?>">
                         <?php if ($product['stock_quantity'] > 0): ?>
                             <span class="in-stock">In Stock (<?= $product['stock_quantity'] ?>)</span>

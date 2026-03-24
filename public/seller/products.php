@@ -7,6 +7,10 @@ function getProductImageUrl($imagePath) {
     if (!$imagePath) {
         return '/images/products/default.jpg';
     }
+    // If it's a base64 data URI, return as-is
+    if (strpos($imagePath, 'data:image/') === 0) {
+        return $imagePath;
+    }
     // If path already contains 'products/', just prepend '/images/'
     if (strpos($imagePath, 'products/') === 0) {
         return '/images/' . $imagePath;
