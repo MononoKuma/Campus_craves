@@ -70,7 +70,7 @@ $pendingVerifications = $adminController->getPendingVerifications();
                             <?php if ($verification['student_id_image']): ?>
                                 <div class="id-preview">
                                     <h4>Student ID Preview:</h4>
-                                    <img src="<?php echo htmlspecialchars($verification['student_id_image']); ?>" 
+                                    <img src="/<?php echo htmlspecialchars($verification['student_id_image']); ?>" 
                                          alt="Student ID" 
                                          class="id-image"
                                          onclick="window.open(this.src, '_blank')">
