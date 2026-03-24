@@ -10,33 +10,12 @@ if (!isSeller()) {
 $sellerController = new SellerController();
 $sellerId = $_SESSION['user_id'];
 $metrics = $sellerController->getDashboardMetrics($sellerId);
-$storeStatus = $sellerController->getStoreStatus($sellerId);
-$profile = $sellerController->getSellerProfile($sellerId);
 ?>
 
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/src/views/partials/header.php'; ?>
 
 <main class="seller-dashboard-main">
     <div class="seller-dashboard-container">
-        <!-- Store Status Banner -->
-        <div class="store-status-card">
-            <div class="store-info">
-                <div class="store-details">
-                    <h2 class="store-name"><?= htmlspecialchars($profile['store_name'] ?? 'My Store') ?></h2>
-                    <div class="store-status-indicator">
-                        <span class="status-dot <?= $storeStatus === 'available' ? 'active' : 'inactive' ?>"></span>
-                        <span class="status-text"><?= $storeStatus === 'available' ? 'Store Available' : 'Store Unavailable' ?></span>
-                    </div>
-                </div>
-                <div class="store-description">
-                    <p>Manage your store settings and view performance metrics</p>
-                </div>
-            </div>
-            <div class="store-actions">
-                <a href="/seller/store-profile.php" class="modern-button primary">Manage Store</a>
-            </div>
-        </div>
-
         <!-- Seller Dashboard Grid -->
         <div class="seller-dashboard-grid">
             <!-- Metrics Overview Card -->
@@ -155,21 +134,7 @@ $profile = $sellerController->getSellerProfile($sellerId);
                                 <p>List a new item for sale</p>
                             </div>
                         </a>
-                        
-                        <a href="/seller/store-profile.php" class="seller-action-item">
-                            <div class="action-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                                    <line x1="12" y1="22.08" x2="12" y2="12"/>
-                                </svg>
-                            </div>
-                            <div class="action-content">
-                                <h3>Store Profile</h3>
-                                <p>Update store information</p>
-                            </div>
-                        </a>
-                        
+
                         <a href="/seller/reports.php" class="seller-action-item">
                             <div class="action-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -317,78 +282,6 @@ $profile = $sellerController->getSellerProfile($sellerId);
     color: white;
 }
 
-/* Store Status Card */
-.store-status-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2rem;
-    background: linear-gradient(135deg, rgba(139, 69, 19, 0.05), rgba(205, 133, 63, 0.05));
-    border: 2px solid rgba(139, 69, 19, 0.2);
-    border-radius: 16px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-}
-
-.store-info {
-    flex: 1;
-}
-
-.store-details {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.store-name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #8B4513;
-    margin: 0;
-}
-
-.store-status-indicator {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.status-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-}
-
-.status-dot.active {
-    background: #22c55e;
-}
-
-.status-dot.inactive {
-    background: #ef4444;
-}
-
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-
-.status-text {
-    font-weight: 600;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-}
-
-.store-description p {
-    color: var(--text-secondary);
-    margin: 0;
-    font-size: 0.95rem;
-}
-
-.store-actions {
-    flex-shrink: 0;
-}
 
 .modern-button {
     padding: 0.75rem 1.5rem;
@@ -712,16 +605,7 @@ $profile = $sellerController->getSellerProfile($sellerId);
         font-size: 1.5rem;
     }
     
-    .store-status-card {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    .store-details {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
+
     
     .metric-card {
         flex-direction: column;
