@@ -76,53 +76,6 @@ $metrics = $adminController->getDashboardMetrics();
                 </div>
             </div>
 
-            <!-- Recent Orders Card - MOVED UP -->
-            <div class="admin-dashboard-card recent-orders">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                    </div>
-                    <h2 class="card-title">Recent Orders</h2>
-                    <div class="card-actions">
-                        <a href="/admin/orders.php" class="view-all-link">View All</a>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="orders-table-container">
-                        <table class="modern-table">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Seller(s)</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($metrics['recent_orders'] as $order): ?>
-                                <tr>
-                                    <td><span class="order-id">#<?= $order['id'] ?></span></td>
-                                    <td><?= htmlspecialchars($order['username']) ?></td>
-                                    <td><?= htmlspecialchars($order['seller_names'] ?: 'N/A') ?></td>
-                                    <td class="amount">Php <?= number_format($order['total_amount'], 2) ?></td>
-                                    <td><?= date('M j, Y', strtotime($order['created_at'])) ?></td>
-                                    <td>
-                                        <a href="/admin/orders.php?view=<?= $order['id'] ?>" class="table-action-btn">View</a>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-
             <!-- Quick Actions Card -->
             <div class="admin-dashboard-card admin-actions">
                 <div class="card-header">
@@ -205,6 +158,52 @@ $metrics = $adminController->getDashboardMetrics();
                                 <p>Handle user complaints</p>
                             </div>
                         </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Orders Card -->
+            <div class="admin-dashboard-card recent-orders">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Recent Orders</h2>
+                    <div class="card-actions">
+                        <a href="/admin/orders.php" class="view-all-link">View All</a>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="orders-table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Seller(s)</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($metrics['recent_orders'] as $order): ?>
+                                <tr>
+                                    <td><span class="order-id">#<?= $order['id'] ?></span></td>
+                                    <td><?= htmlspecialchars($order['username']) ?></td>
+                                    <td><?= htmlspecialchars($order['seller_names'] ?: 'N/A') ?></td>
+                                    <td class="amount">Php <?= number_format($order['total_amount'], 2) ?></td>
+                                    <td><?= date('M j, Y', strtotime($order['created_at'])) ?></td>
+                                    <td>
+                                        <a href="/admin/orders.php?view=<?= $order['id'] ?>" class="table-action-btn">View</a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -297,9 +296,20 @@ $metrics = $adminController->getDashboardMetrics();
 /* Admin Dashboard Grid */
 .admin-dashboard-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto;
     gap: 2rem;
     flex: 1;
+}
+
+.admin-actions {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.recent-orders {
+    grid-column: 1;
+    grid-row: 2;
 }
 
 .metrics-overview {
